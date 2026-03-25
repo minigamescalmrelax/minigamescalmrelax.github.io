@@ -82,6 +82,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 .pbtn{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;padding:.56rem 1.3rem;border-radius:12px;border:none;cursor:pointer;transition:all .22s;display:inline-block;margin-top:.4rem}
 .pbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;box-shadow:0 3px 14px rgba(240,168,74,.22)}
 .pbtn.out{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.pbtn.danger{background:rgba(232,130,106,.08);color:var(--rose);border:1px solid rgba(232,130,106,.28)}
+.pbtn.danger:hover{background:rgba(232,130,106,.15)}
 .mswitch{text-align:center;margin-top:.9rem;font-size:.77rem;color:var(--muted)}
 .mswitch a{color:var(--amber);cursor:pointer;font-weight:700}
 
@@ -212,7 +214,9 @@ var me=null, chatRef=null, chatCb=null, isLight=false, activeDM=null, currentPat
 /* ── HELPERS ── */
 function escapeHtml(str){ return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 function toast(m,ms=3000){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
-function toggleTheme(){isLight=!isLight;document.body.classList.toggle('light',isLight);document.getElementById('themeBtn').textContent=isLight?"☀️":"🌙"}
+function applyTheme(light){isLight=!!light;document.body.classList.toggle('light',isLight);const tb=document.getElementById('themeBtn');if(tb)tb.textContent=isLight?"☀️":"🌙";localStorage.setItem('theme',isLight?'light':'dark')}
+function toggleTheme(){applyTheme(!isLight)}
+(function initTheme(){applyTheme(localStorage.getItem('theme')==='light')})();
 
 /* ── EMAIL VERIFICATION HANDLER ── */
 async function handleEmailVerification() {
@@ -256,7 +260,8 @@ function navigate(p,a){
   let h=p;
   if(a)h+="/"+a;
   if(p==='home'){
-    try{history.pushState({},'',location.pathname)}catch(_){}
+    try{history.replaceState({},'',location.pathname+location.search)}catch(_){}
+    if(location.hash) location.hash='';
     handleRoute();
   } else {
     location.hash=h;
@@ -359,6 +364,14 @@ async function checkVerification() {
   if(!auth.currentUser) return;
   toast("Checking...");
   await auth.currentUser.reload();
+  if(auth.currentUser.emailVerified){
+    document.getElementById('verifyBanner').style.display='none';
+    unverifiedMode=false;
+    toast("✅ Email verified successfully!");
+    location.reload();
+  } else {
+    toast("⚠️ Still not verified yet.");
+  }
 }
 
 /* ── MODAL ── */
@@ -526,8 +539,8 @@ function sub(){
       const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.user||"?")[0]}</span>`;
       const ia=ADMINS.includes(d.uid);
       const iam=ADMINS.includes(me.uid);
-      const db=iam?`<button class="del-msg-btn" onclick="delMsg('${p}','${k}')">🗑️</button>`:"";
-      h+=`<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${a}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${d.user||"?"} ${ia?`<span class="admin-badge">⭐</span>`:""}</div><div class="chat-text">${d.text.replace(/</g,"&lt;")}</div></div>${db}</div>`;
+      const delBtn=iam?`<button class="del-msg-btn" onclick="delMsg('${p}','${k}')">🗑️</button>`:"";
+      h+=`<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${a}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${d.user||"?"} ${ia?`<span class="admin-badge">⭐</span>`:""}</div><div class="chat-text">${d.text.replace(/</g,"&lt;")}</div></div>${delBtn}</div>`;
     });
     b.innerHTML=h;
     b.scrollTop=b.scrollHeight;
