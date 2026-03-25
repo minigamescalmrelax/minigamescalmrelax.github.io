@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini Games Calm Relax</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#16110e; --bg2:#1e1712; --bg3:#261d16;
+  --border:rgba(255,210,140,0.09); --border2:rgba(255,210,140,0.18);
+  --text:#f5ead8; --muted:#8a7460;
+  --amber:#f0a84a; --amber2:#ffd280; --rose:#e8826a; --teal:#5bbfa8; --lilac:#b094d4;
+  --nav-bg:rgba(22,17,14,0.9); --panel-bg:rgba(26,19,14,0.95);
+  --check-a:rgba(255,210,140,0.028);
+}
+body.light {
+  --bg:#fdf6ec; --bg2:#fff8f2; --bg3:#f5ede0;
+  --border:rgba(180,120,50,0.12); --border2:rgba(180,120,50,0.22);
+  --text:#2e1f0e; --muted:#8a6f50;
+  --nav-bg:rgba(253,246,236,0.92); --panel-bg:rgba(255,248,242,0.97);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh;transition:background .4s,color .3s}
+#checker{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(45deg,var(--check-a) 25%,transparent 25%),linear-gradient(135deg,var(--check-a) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--check-a) 75%),linear-gradient(135deg,transparent 75%,var(--check-a) 75%);background-size:40px 40px;background-position:0 0,20px 0,20px -20px,0 20px;animation:checkScroll 5s linear infinite}
+@keyframes checkScroll{from{background-position:0 0,20px 0,20px -20px,0 20px}to{background-position:-40px 40px,-20px 40px,-20px 20px,-40px 60px}}
+body.light #checker{opacity:.6}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 80% 5%,rgba(240,168,74,.09) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 5% 90%,rgba(232,130,106,.07) 0%,transparent 70%);animation:glowPulse 8s ease-in-out infinite alternate}
+@keyframes glowPulse{from{opacity:.8}to{opacity:1}}
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite}
+@keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.6}90%{opacity:.2}100%{transform:translateY(-100vh) scale(.4);opacity:0}}
+#grain{position:fixed;inset:0;z-index:999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.035}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;gap:4px;padding:.75rem 1.5rem;background:var(--nav-bg);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background .4s}
+.nav-logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.9rem;color:var(--text);cursor:pointer}
+.logo-badge{width:28px;height:28px;background:linear-gradient(135deg,var(--amber),var(--rose));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.82rem;box-shadow:0 3px 10px rgba(240,168,74,.28)}
+.nbtn{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;padding:.42rem .9rem;border-radius:10px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted)}
+.nbtn:hover{background:rgba(255,210,140,.07);color:var(--text)}
+.nbtn.outline{border:1px solid var(--border2);color:var(--text)}
+.nbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;box-shadow:0 3px 14px rgba(240,168,74,.25)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+#profileBtn{display:none;align-items:center;gap:.45rem;background:rgba(255,210,140,.07);border:1px solid var(--border2);color:var(--text);padding:.35rem .8rem .35rem .4rem;border-radius:100px;font-size:.76rem;font-weight:700;cursor:pointer}
+.pav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;overflow:hidden;background:var(--bg3);border:1.5px solid rgba(240,168,74,.4)}
+.pav img{width:100%;height:100%;object-fit:cover}
+#coinsChip{font-size:.75rem;font-weight:700;color:var(--amber);background:rgba(240,168,74,.1);border:1px solid rgba(240,168,74,.2);border-radius:100px;padding:.3rem .8rem}
+#onlineChip{font-size:.75rem;font-weight:700;color:var(--teal);background:rgba(91,191,168,.1);border:1px solid rgba(91,191,168,.2);border-radius:100px;padding:.3rem .8rem;display:flex;align-items:center;gap:.35rem}
+#onlineDot{width:8px;height:8px;background:#5bbfa8;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+
+.panel{position:relative;z-index:1;width:clamp(300px,92vw,640px);margin:6.5rem auto 3rem;padding:2.3rem;background:var(--panel-bg);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:26px;box-shadow:0 24px 70px rgba(0,0,0,.32);text-align:center;animation:panelIn .55s cubic-bezier(.23,1,.32,1) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.panel h1{font-size:1.85rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.4rem}
+.panel h1 em{font-family:'Lora',serif;font-style:italic;background:linear-gradient(100deg,var(--amber),var(--amber2),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;display:block;text-align:left}
+.divider{height:1px;margin:1.3rem 0;background:linear-gradient(to right,transparent,var(--border2),transparent)}
+.info{text-align:left}
+
+.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(10,7,4,.72);backdrop-filter:blur(18px);z-index:1000}
+.modal.open{display:flex}
+.mwin{width:350px;background:var(--bg2);border:1px solid var(--border2);padding:2rem;border-radius:24px;box-shadow:0 40px 80px rgba(0,0,0,.5);transform:scale(.9);opacity:0;transition:.3s cubic-bezier(.34,1.56,.64,1)}
+.modal.open .mwin{transform:none;opacity:1}
+.mbadge{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.85rem;background:rgba(240,168,74,.1)}
+.mwin h2{font-size:1.3rem;font-weight:800;margin-bottom:.2rem}
+.msub{font-size:.8rem;color:var(--muted);margin-bottom:1.2rem}
+.inp{width:100%;padding:.66rem .9rem;margin:.28rem 0;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:11px;font-family:'Nunito',sans-serif;font-size:.87rem;color:var(--text);outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--amber)}
+.pbtn{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;padding:.56rem 1.3rem;border-radius:12px;border:none;cursor:pointer;transition:all .22s;display:inline-block;margin-top:.4rem}
+.pbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;box-shadow:0 3px 14px rgba(240,168,74,.22)}
+.mswitch{text-align:center;margin-top:.9rem;font-size:.77rem;color:var(--muted)}
+.mswitch a{color:var(--amber);cursor:pointer;font-weight:700}
+
+.chat-layout{display:grid;grid-template-columns:180px 1fr;gap:1rem;margin-top:.8rem;text-align:left}
+.chat-sidebar{display:flex;flex-direction:column;gap:.35rem}
+.chat-room-btn{font-size:.78rem;font-weight:700;padding:.5rem .75rem;border-radius:10px;border:none;cursor:pointer;background:transparent;color:var(--muted);text-align:left;width:100%;transition:all .2s}
+.chat-room-btn:hover{background:rgba(255,210,140,.07);color:var(--text)}
+.chat-room-btn.active{background:rgba(255,210,140,.1);color:var(--amber);border:1px solid rgba(255,210,140,.15)}
+.chat-room-section{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:.4rem .75rem .2rem;margin-top:.3rem}
+.chat-box{height:240px;overflow-y:auto;background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;padding:.75rem 1rem}
+.chat-msg{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.5rem;position:relative}
+.chat-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;overflow:hidden;cursor:pointer;flex-shrink:0}
+.chat-av img{width:100%;height:100%;object-fit:cover}
+.chat-body{font-size:.82rem;line-height:1.5;flex-grow:1;word-break:break-word}
+.chat-user{font-weight:800;color:var(--amber);font-size:.74rem;margin-bottom:.08rem;cursor:pointer;display:inline-block}
+.chat-text{color:var(--text)}
+.del-msg-btn{position:absolute;right:0;top:0;font-size:.7rem;cursor:pointer;opacity:0;color:var(--muted);background:none;border:none}
+.chat-msg:hover .del-msg-btn{opacity:1}
+.del-msg-btn:hover{color:var(--rose)}
+.admin-badge{font-size:.6rem;font-weight:700;background:linear-gradient(135deg,var(--rose),#d66a5a);color:#fff;padding:.18rem .45rem;border-radius:6px;margin-left:.4rem;vertical-align:middle}
+.admin-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.ban-btn{font-size:.78rem;font-weight:700;padding:.45rem 1rem;border-radius:10px;border:1px solid rgba(232,130,106,.3);background:rgba(232,130,106,.08);color:var(--rose);cursor:pointer}
+
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:100px;padding:.65rem 1.4rem;font-size:.8rem;font-weight:700;z-index:2000;opacity:0;transition:all .3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4);pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Search & Games */
+.games-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-top:1rem}
+.gtile{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:16px;padding:1.1rem;text-align:left;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.gtile:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.ticon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:.6rem}
+.tname{font-weight:800;font-size:.88rem;margin-bottom:.18rem;color:var(--text);position:relative;z-index:1}
+.ttag{font-size:.64rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;position:relative;z-index:1}
+.gtile:nth-child(1) .ttag{color:var(--amber)}.gtile:nth-child(2) .ttag{color:var(--teal)}.gtile:nth-child(3) .ttag{color:var(--rose)}.gtile:nth-child(4) .ttag{color:var(--lilac)}
+.gtile:nth-child(1) .ticon{background:rgba(240,168,74,.12)}.gtile:nth-child(2) .ticon{background:rgba(91,191,168,.12)}.gtile:nth-child(3) .ticon{background:rgba(232,130,106,.12)}.gtile:nth-child(4) .ticon{background:rgba(176,148,212,.12)}
+.search-bar-wrap{position:relative;margin-bottom:1rem}
+.search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:1rem;opacity:.5}
+.search-tabs{display:flex;gap:.35rem;margin-bottom:1rem}
+.stab{font-size:.72rem;font-weight:700;padding:.35rem .85rem;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer}
+.stab:hover{background:rgba(255,210,140,.07);color:var(--text)}
+.stab.active{background:rgba(240,168,74,.12);border-color:rgba(240,168,74,.35);color:var(--amber)}
+.search-section-lbl{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:1rem 0 .5rem;display:block}
+.game-cards{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.5rem}
+.game-card{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s;text-align:left}
+.game-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.game-card-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.game-card-body{padding:.55rem .7rem .6rem}
+.game-card-name{font-weight:800;font-size:.82rem;color:var(--text);margin-bottom:.18rem}
+.game-card-meta{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.game-card-tag{font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.15rem .45rem;border-radius:100px}
+.game-card-badge{font-size:.58rem;font-weight:700;padding:.12rem .38rem;border-radius:6px;background:rgba(91,191,168,.15);color:var(--teal)}
+.result-item{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border-radius:12px;background:rgba(255,210,140,.03);border:1px solid var(--border);margin-bottom:.45rem;font-size:.84rem;font-weight:600;cursor:pointer}
+.result-item:hover{border-color:var(--border2);background:rgba(255,210,140,.07)}
+.fav{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.85rem;overflow:hidden;border:1.5px solid var(--border2)}
+.fav img{width:100%;height:100%;object-fit:cover}
+.pbtn.sm{padding:.3rem .6rem;font-size:.7rem;margin-top:0}
+.no-results{text-align:center;padding:2rem 0;color:var(--muted);font-size:.85rem}
+
+/* Profile */
+.prof-wrap{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.av-ring{width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--rose));padding:3px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(240,168,74,.25);animation:avPop .6s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes avPop{from{transform:scale(.5) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
+.av-inner{width:100%;height:100%;border-radius:50%;background:var(--bg2);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.4rem}
+.av-inner img{width:100%;height:100%;object-fit:cover}
+.upload-lbl{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.77rem;font-weight:700;color:var(--muted);background:rgba(255,210,140,.05);border:1px solid var(--border2);border-radius:10px;padding:.42rem .9rem;margin-top:.2rem}
+.upload-lbl:hover{background:rgba(255,210,140,.1);color:var(--text)}
+.upload-lbl input{display:none}
+</style>
+</head>
+<body>
+
+<div id="checker"></div>
+<div id="glow"></div>
+<div id="particles"></div>
+<div id="grain"></div>
+
+<nav>
+  <div class="nav-logo" onclick="navigate('home')"><div class="logo-badge">🎮</div>Mini Games Calm Relax</div>
+  <button class="nbtn" onclick="navigate('home')">Home</button>
+  <button class="nbtn" onclick="navigate('about')">About</button>
+  <button class="nbtn" onclick="navigate('games')">Games</button>
+  <button class="nbtn" id="chatNavBtn" style="display:none" onclick="navigate('chat')">Chat</button>
+  <div class="nav-right">
+    <button class="nbtn outline" onclick="navigate('search')">🔍</button>
+    <button class="nbtn outline" id="loginBtn" onclick="openLogin()">Log in</button>
+    <button class="nbtn warm" id="signupBtn" onclick="openSignup()">Sign up</button>
+    <button id="profileBtn" onclick="navigate('profile')"><div class="pav" id="pav">?</div><span id="pavName">Profile</span></button>
+    <button class="nbtn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    <div id="coinsChip">🪙 <span id="coinCount">0</span></div>
+    <div id="onlineChip"><div id="onlineDot"></div><span id="onlineCount">0</span></div>
+  </div>
+</nav>
+
+<div class="panel animate" id="panel"></div>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="mwin" id="mwin"></div></div>
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+/* ─────────────────────────────────────────────
+   FIREBASE
+   ───────────────────────────────────────────── */
+const firebaseConfig = {
+  apiKey: "AIzaSyAqEqV8SunMJe5gC4vo-71sB54UFig2fWw",
+  authDomain: "mini-games-calm-relax-70452.firebaseapp.com",
+  databaseURL: "https://mini-games-calm-relax-70452-default-rtdb.firebaseio.com",
+  projectId: "mini-games-calm-relax-70452",
+  storageBucket: "mini-games-calm-relax-70452.firebasestorage.app",
+  messagingSenderId: "253454230173",
+  appId: "1:253454230173:web:963700f752bfccda78ea74"
+};
+/* ───────────────────────────────────────────── */
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+const ADMINS = []; // Paste your UID here after you sign up!
+
+var me=null, chatRef=null, chatCb=null, isLight=false, activeDM=null, currentPath="home", isBanned=false;
+
+function initPresence(){
+  const ref=db.ref("presence"); let sid=localStorage.getItem('sid')||Math.random().toString(36).substr(2,9); localStorage.setItem('sid',sid);
+  db.ref(".info/connected").on("value",s=>{if(s.val()===true){ref.child(sid).set(true);ref.child(sid).onDisconnect().remove()}});
+  ref.on("value",s=>document.getElementById('onlineCount').textContent=s.numChildren());
+}
+initPresence();
+
+function toast(m,ms=2600){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+function toggleTheme(){isLight=!isLight;document.body.classList.toggle('light',isLight);document.getElementById('themeBtn').textContent=isLight?"☀️":"🌙"}
+function setPanel(h){if(chatRef){chatRef.off("value",chatCb);chatRef=null} const el=document.getElementById('panel');el.classList.remove('animate');el.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('animate')))}
+
+function navigate(p,a){let h=p;if(a)h+="/"+a;if(p==='home'){try{history.pushState({},'',location.pathname)}catch(_){}handleRoute()}else location.hash=h}
+function handleRoute(){const h=location.hash.slice(1)||"home";const [p,a]=h.split("/");currentPath=p;if(!me&&p==='chat'){toast("⚠️ Log in first.");navigate('home');return}switch(p){case'about':renderAbout();break;case'games':renderGames();break;case'search':renderSearch();break;case'chat':activeDM=a||null;renderChat();break;case'profile':a?renderUserProfile(a):renderProfile();break;default:renderHome()}}
+window.addEventListener('hashchange',handleRoute);window.addEventListener('popstate',handleRoute);
+
+firebase.auth().onAuthStateChanged(async u=>{
+  if(isBanned)return;
+  if(u){
+    const b=await db.ref("banned/"+u.uid).once("value");if(b.exists()){isBanned=true;toast("⚠️ Banned");await auth.signOut();return}
+    const s=await db.ref("users/"+u.uid).get();
+    if(s.exists()){const d=s.val();me={uid:u.uid,username:d.username||"User",coins:d.coins||0,avatar:d.avatar||"",friends:d.friends||{},blocked:d.blocked||{},sentRequests:d.sentRequests||{}}}
+    else{me={uid:u.uid,username:u.email.split('@')[0],coins:0,avatar:"",friends:{},blocked:{},sentRequests:{}};await db.ref("users/"+u.uid).set(me)}
+    onLogIn();
+  }else{isBanned=false;me=null;onLogOut()}
+  handleRoute();
+});
+
+function onLogIn(){
+  document.getElementById('loginBtn').style.display='none';document.getElementById('signupBtn').style.display='none';
+  document.getElementById('profileBtn').style.display='flex';document.getElementById('chatNavBtn').style.display='inline-block';
+  document.getElementById('coinCount').textContent=me.coins||0;document.getElementById('pavName').textContent=me.username;
+  const p=document.getElementById('pav');me.avatar?p.innerHTML=`<img src="${me.avatar}">`:p.textContent=me.username[0].toUpperCase();
+  db.ref("friendRequests/"+me.uid).on("value",s=>{const c=s.exists()?s.numChildren():0;const b=document.getElementById('profileBtn');const o=document.getElementById('rbadge');if(o)o.remove();if(c>0){const d=document.createElement("span");d.id='rbadge';d.textContent=c;d.style.cssText="background:var(--rose);color:#fff;font-size:.6rem;font-weight:800;padding:.1rem .38rem;border-radius:100px";b.appendChild(d)}});
+}
+function onLogOut(){document.getElementById('loginBtn').style.display='inline-block';document.getElementById('signupBtn').style.display='inline-block';document.getElementById('profileBtn').style.display='none';document.getElementById('chatNavBtn').style.display='none';document.getElementById('coinCount').textContent=0;if(me)db.ref("friendRequests/"+me.uid).off();const o=document.getElementById('rbadge');if(o)o.remove()}
+
+function openModal(h){document.getElementById('mwin').innerHTML=h;document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+function openSignup(){openModal(`<div class="mbadge">✨</div><h2>Join the fun</h2><p class="msub">Create your free account</p><input class="inp" id="suEmail" type="email" placeholder="Email"><input class="inp" id="suUser" placeholder="Username"><input class="inp" id="suPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doSignup()">Create account</button><p class="mswitch">Already registered? <a onclick="openLogin()">Log in</a></p>`)}
+async function doSignup(){const e=document.getElementById('suEmail').value.trim(),u=document.getElementById('suUser').value.trim(),p=document.getElementById('suPass').value;if(!e||!u||!p){toast("⚠️ Fill all fields");return}if(p.length<6){toast("⚠️ 6+ chars");return}try{const c=await auth.createUserWithEmailAndPassword(e,p);await db.ref("users/"+c.user.uid).set({username:u,coins:0,avatar:"",friends:{},blocked:{}});closeModal();toast("🎉 Welcome, "+u+"!")}catch(e){toast("⚠️ "+e.message)}}
+
+function openLogin(){openModal(`<div class="mbadge">👋</div><h2>Welcome back</h2><p class="msub">Log in</p><input class="inp" id="liEmail" type="email" placeholder="Email"><input class="inp" id="liPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doLogin()">Log in</button><p class="mswitch"><a onclick="resetPass()">Forgot Password?</a></p><p class="mswitch">No account? <a onclick="openSignup()">Sign up</a></p>`)}
+async function doLogin(){const e=document.getElementById('liEmail').value.trim(),p=document.getElementById('liPass').value;try{await auth.signInWithEmailAndPassword(e,p);closeModal()}catch(_){toast("⚠️ Incorrect credentials")}}
+async function resetPass(){const e=document.getElementById('liEmail').value.trim();if(!e){toast("⚠️ Enter email first");return}try{await auth.sendPasswordResetEmail(e);toast("✅ Email sent!");closeModal()}catch(e){toast("⚠️ "+e.message)}}
+
+function renderHome(){setPanel(`<h1>Welcome to <em>Mini Games Calm Relax!</em></h1><p>A cozy corner of the internet.</p><div class="divider"></div><span class="lbl">Latest news</span><ul style="list-style:none;text-align:left"><li>✦ Site launched on GitHub Pages!</li></ul>`)}
+function renderAbout(){setPanel(`<div class="info"><h1>About 🍵</h1><div class="divider"></div><p>Hosted on <strong style="color:var(--amber)">GitHub Pages</strong>.</p></div>`)}
+function renderGames(){setPanel(`<h1>Games 🎮</h1><div class="games-grid"><div class="gtile" onclick="toast('Coming soon!')"><div class="ticon" style="background:rgba(240,168,74,.12)">🎵</div><div class="tname">Sprunki</div><div class="ttag">Music</div></div><div class="gtile" onclick="toast('Coming soon!')"><div class="ticon" style="background:rgba(91,191,168,.12)">🐔</div><div class="tname">Platform Chicken</div><div class="ttag">Platformer</div></div><div class="gtile" onclick="toast('Coming soon!')"><div class="ticon" style="background:rgba(232,130,106,.12)">🔢</div><div class="tname">2048</div><div class="ttag">Puzzle</div></div><div class="gtile" onclick="window.open('https://freebaldi.github.io','_blank')"><div class="ticon" style="background:rgba(176,148,212,.12)">📚</div><div class="tname">Baldi's Basics</div><div class="ttag">Play Now</div></div></div>`)}
+
+/* Search Logic */
+const GAMES=[{n:"Sprunki",t:"Music",i:"🎵",c:"rgba(240,168,74,.15)",tc:"var(--amber)",p:"124",b:"",a:`toast('Soon')`},{n:"Baldi's Basics",t:"Adventure",i:"📚",c:"rgba(176,148,212,.15)",tc:"var(--lilac)",p:"56",b:"Play Now",a:`open('https://freebaldi.github.io','_blank')`}];
+var stab="all";
+function renderSearch(){setPanel(`<h1>Discover 🔍</h1><div class="search-bar-wrap"><span class="search-icon">🔍</span><input class="inp" id="sq" placeholder="Search..." oninput="doSearch()"></div><div class="search-tabs"><button class="stab active" id="ta" onclick="setTab('all')">All</button><button class="stab" id="tg" onclick="setTab('games')">Games</button><button class="stab" id="tp" onclick="setTab('people')">People</button></div><div id="sr" class="info"></div>`);renderDef()}
+function setTab(t){stab=t;['a','g','p'].forEach(x=>document.getElementById('t'+x).classList.toggle('active',t===['all','games','people'][['a','g','p'].indexOf(x)]));doSearch()}
+function renderDef(){const r=document.getElementById('sr');if(!r)return;let h="";if(stab!=="people"){h+=`<span class="search-section-lbl">🔥 Popular</span>`;h+=buildGames(GAMES)}if(stab!=="games"){h+=`<span class="search-section-lbl">✦ Add Friend</span><div style="display:flex;gap:.5rem"><input class="inp" id="fuid" placeholder="Paste UID" style="margin:0"><button class="pbtn warm" style="margin:0" onclick="addFriend()">Add</button></div>`}r.innerHTML=h}
+function buildGames(l){if(!l.length)return"";let h=`<div class="game-cards">`;l.forEach(g=>{h+=`<div class="game-card" onclick="${g.a}"><div class="game-card-thumb" style="background:${g.c}">${g.i}</div><div class="game-card-body"><div class="game-card-name">${g.n}</div><div class="game-card-meta"><span class="game-card-tag" style="background:${g.c};color:${g.tc}">${g.t}</span><span style="font-size:.65rem;color:var(--muted)">👥 ${g.p}</span>${g.b?`<span class="game-card-badge">${g.b}</span>`:""}</div></div></div>`});return h+'</div>'}
+function buildPeople(u){if(!u.length)return"";let h="";u.forEach(d=>{const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.username||"?")[0]}</span>`;const f=me&&me.friends&&me.friends[d.uid];const bl=me&&me.blocked&&me.blocked[d.uid];const sr=me&&me.sentRequests&&me.sentRequests[d.uid];const fc=f?`<span style="font-size:.6rem;color:var(--teal);background:rgba(91,191,168,.1);padding:.12rem .4rem;border-radius:100px;margin-left:.3rem">Friend</span>`:"";let act="";if(me){if(d.uid!==me.uid){if(bl){act=`<button class="pbtn sm danger" onclick="event.stopPropagation();unblock('${d.uid}')">Unblock</button>`}else if(f){act=`<button class="pbtn sm out" onclick="event.stopPropagation();navigate('chat','${d.uid}')">Msg</button>`}else if(sr){act=`<button class="pbtn sm out" style="opacity:.6">Pending</button>`}else{act=`<button class="pbtn sm out" onclick="event.stopPropagation();sendReq('${d.uid}')">Add</button>`}}}else{act=`<button class="pbtn sm out" onclick="openLogin()">Log in</button>`}h+=`<div class="result-item" onclick="navigate('profile','${d.uid}')"><div class="fav">${a}</div><div style="flex-grow:1"><div style="font-weight:700">${d.username||"?"}${fc}</div><div style="font-size:.64rem;color:var(--muted)">${d.uid}</div></div>${act}</div>`});return h}
+async function doSearch(){const q=(document.getElementById('sq')?.value||"").trim().toLowerCase();const r=document.getElementById('sr');if(!r)return;if(!q){renderDef();return}let h="";if(stab!=="people"){const f=GAMES.filter(g=>g.n.toLowerCase().includes(q));if(f.length){h+=`<span class="search-section-lbl">🎮 Games</span>`;h+=buildGames(f)}}if(stab!=="games"){r.innerHTML=h+`<span class="search-section-lbl">👤 People</span><div id="ps"></div>`;try{let f=[];const us=await db.ref("users/"+q).once("value");if(us.exists())f.push({uid:q,...us.val()});const qs=[q,q[0].toUpperCase()+q.slice(1)];for(const k of qs){const ns=await db.ref("users").orderByChild("username").startAt(k).endAt(k+"\uf8ff").limitToFirst(6).once("value");ns.forEach(u=>{if(!f.find(x=>x.uid===u.key))f.push({uid:u.key,...u.val()})})}const s=document.getElementById('ps');s.innerHTML=f.length?buildPeople(f):`<div class="no-results">No results</div>`}catch(e){console.error(e)}}else r.innerHTML=h}
+
+/* Friend Logic */
+async function addFriend(){const id=document.getElementById('fuid')?.value.trim();if(!id){toast("Paste UID");return}if(!me){toast("Log in");return}if(id===me.uid){toast("That's you");return}await sendReq(id)}
+async function sendReq(id){if(!me)return;if(me.friends&&me.friends[id]){toast("Already friends");return}if(me.sentRequests&&me.sentRequests[id]){toast("Already sent");return}try{const tr=await db.ref("friendRequests/"+me.uid+"/"+id).once("value");if(tr.exists()){await acceptReq(id,true);return}const s=await db.ref("users/"+id).get();if(!s.exists()){toast("User not found");return}await db.ref("friendRequests/"+id+"/"+me.uid).set({from:me.uid,username:me.username,avatar:me.avatar||"",ts:Date.now()});await db.ref("users/"+me.uid+"/sentRequests/"+id).set(true);if(!me.sentRequests)me.sentRequests={};me.sentRequests[id]=true;toast("📨 Request sent!")}catch(e){toast("⚠️ "+e.message)}}
+async function acceptReq(id,s){if(!me)return;try{await db.ref("users/"+me.uid+"/friends/"+id).set(true);await db.ref("users/"+id+"/friends/"+me.uid).set(true);await db.ref("friendRequests/"+me.uid+"/"+id).remove();await db.ref("users/"+id+"/sentRequests/"+me.uid).remove();if(!me.friends)me.friends={};me.friends[id]=true;toast(s?"✅ Mutual friends!":"✅ Friends!");renderProfile()}catch(e){toast("⚠️ "+e.message)}}
+async function block(id){if(!me)return;try{await db.ref("users/"+me.uid+"/blocked/"+id).set(true);if(!me.blocked)me.blocked={};me.blocked[id]=true;toast("Blocked");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function unblock(id){if(!me)return;try{await db.ref("users/"+me.uid+"/blocked/"+id).remove();if(me.blocked)delete me.blocked[id];toast("Unblocked");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+
+/* Profile Logic */
+async function renderProfile(){if(!me)return;const a=me.avatar?`<img src="${me.avatar}">`:me.username[0].toUpperCase();const ia=ADMINS.includes(me.uid);const fc=me.friends?Object.keys(me.friends).length:0;let rh="";try{const rs=await db.ref("friendRequests/"+me.uid).once("value");if(rs.exists()){const rq=[];rs.forEach(r=>rq.push({uid:r.key,...r.val()}));if(rq.length){rh=`<div class="divider"></div><span class="lbl">📨 Requests (${rq.length})</span><div style="display:flex;flex-direction:column;gap:.4rem">`;rq.forEach(r=>{const av=r.avatar?`<img src="${r.avatar}">`:`<span>${(r.username||"?")[0]}</span>`;rh+=`<div style="display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:12px"><div class="fav" onclick="navigate('profile','${r.uid}')">${av}</div><div style="flex-grow:1;font-weight:700">${r.username||"?"}</div><button class="pbtn sm warm" onclick="acceptReq('${r.uid}',false)">Accept</button><button class="pbtn sm out" onclick="decline('${r.uid}')">Decline</button></div>`});rh+='</div>'}}}catch(_){}setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${a}</div></div><h2>${me.username}</h2>${ia?`<span class="admin-badge">⭐ Admin</span>`:''}<p style="color:var(--muted)">🪙 ${me.coins||0} coins · 👥 ${fc} friends</p><label class="upload-lbl">📷 Avatar<input type="file" accept="image/*" onchange="upAv(event)"></label><p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">UID: <strong style="color:var(--amber);user-select:all">${me.uid}</strong></p>${rh}<div class="divider"></div><button class="pbtn out" onclick="auth.signOut().then(()=>{me=null;onLogOut();toast('Bye!');navigate('home')})">Log out</button><button class="pbtn danger" style="margin-left:.4rem" onclick="delAcc()">Delete Account</button></div>`)}
+async function renderUserProfile(id){try{const s=await db.ref("users/"+id).get();if(!s.exists()){toast("Not found");navigate('home');return}const u=s.val();const a=u.avatar?`<img src="${u.avatar}">`:(u.username||"U")[0];const ia=ADMINS.includes(id);let act="";let aa="";if(me){const f=me.friends&&me.friends[id];const bl=me.blocked&&me.blocked[id];const sr=me.sentRequests&&me.sentRequests[id];const iam=ADMINS.includes(me.uid);let tr=false;try{const r=await db.ref("friendRequests/"+me.uid+"/"+id).once("value");tr=r.exists()}catch(_){}if(id!==me.uid){if(bl){act=`<button class="pbtn danger" onclick="unblock('${id}')">Unblock</button>`}else if(f){act=`<button class="pbtn out" onclick="navigate('chat','${id}')">Message</button><button class="pbtn danger" style="margin-left:.5rem" onclick="remFriend('${id}')">Remove</button><button class="pbtn danger" style="margin-left:.5rem" onclick="block('${id}')">Block</button>`}else if(tr){act=`<button class="pbtn warm" onclick="acceptReq('${id}',false)">Accept</button><button class="pbtn out" style="margin-left:.5rem" onclick="decline('${id}')">Decline</button>`}else if(sr){act=`<button class="pbtn out" style="opacity:.7">Pending</button><button class="pbtn danger" style="margin-left:.5rem" onclick="cancelReq('${id}')">Cancel</button>`}else{act=`<button class="pbtn warm" onclick="sendReq('${id}')">Add Friend</button><button class="pbtn danger" style="margin-left:.5rem" onclick="block('${id}')">Block</button>`}}if(iam&&id!==me.uid){aa=`<div class="admin-actions"><button class="ban-btn" onclick="ban('${id}')">🚫 Ban</button><button class="ban-btn" style="background:rgba(200,50,50,.1);color:#c44" onclick="delData('${id}')">🗑️ Delete Data</button></div>`}}else{act=`<button class="pbtn warm" onclick="openLogin()">Log in</button>`}setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${a}</div></div><h2>${u.username||"?"}</h2>${ia?`<span class="admin-badge">⭐ Admin</span>`:''}<p style="color:var(--muted)">🪙 ${u.coins||0} coins</p><div style="margin-top:.8rem">${act}</div>${aa}</div>`)}catch(_){toast("Error")}}
+async function decline(id){if(!me)return;try{await db.ref("friendRequests/"+me.uid+"/"+id).remove();await db.ref("users/"+id+"/sentRequests/"+me.uid).remove();toast("Declined");renderProfile()}catch(e){toast("⚠️ "+e.message)}}
+async function cancelReq(id){if(!me)return;try{await db.ref("friendRequests/"+id+"/"+me.uid).remove();await db.ref("users/"+me.uid+"/sentRequests/"+id).remove();if(me.sentRequests)delete me.sentRequests[id];toast("Cancelled");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function remFriend(id){if(!me||!confirm("Remove friend?"))return;try{await db.ref("users/"+me.uid+"/friends/"+id).remove();await db.ref("users/"+id+"/friends/"+me.uid).remove();if(me.friends)delete me.friends[id];toast("Removed");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function ban(id){if(!ADMINS.includes(me.uid))return;if(!confirm("Ban user?"))return;try{await db.ref("banned/"+id).set(true);toast("Banned");navigate('home')}catch(e){toast("⚠️ "+e.message)}}
+async function delData(id){if(!ADMINS.includes(me.uid))return;if(!confirm("Delete data?"))return;try{await db.ref("users/"+id).remove();await db.ref("banned/"+id).remove();toast("Deleted");navigate('home')}catch(e){toast("⚠️ "+e.message)}}
+async function upAv(e){const f=e.target.files[0];if(!f||!me)return;toast("Uploading...");try{const ri=await new Promise((res,rej)=>{const r=new FileReader();r.onload=ev=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');const mx=128;let w=i.width,h=i.height;if(w>h){if(w>mx){h*=mx/w;w=mx}}else{if(h>mx){w*=mx/h;h=mx}c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h);res(c.toDataURL('image/jpeg',.7))};i.src=ev.target.result};r.onerror=rej;r.readAsDataURL(f)});await db.ref("users/"+me.uid+"/avatar").set(ri);me.avatar=ri;document.getElementById('pav').innerHTML=`<img src="${ri}">`;toast("✅ Updated!");renderProfile()}catch(_){toast("⚠️ Failed")}}
+async function delAcc(){if(!confirm("Delete account?"))return;try{await db.ref("users/"+me.uid).remove();await auth.currentUser.delete();toast("Deleted");navigate('home')}catch(e){toast("⚠️ "+e.message)}}
+
+/* Chat Logic */
+async function renderChat(){if(!me)return;const fids=Object.keys(me.friends||{}).filter(k=>me.friends[k]);let btns="";for(const id of fids){const ac=activeDM===id?"active":"";let lb=id.slice(0,6)+"…";try{const s=await db.ref("users/"+id+"/username").once("value");if(s.exists())lb=s.val()}catch(_){}btns+=`<button class="chat-room-btn ${ac}" onclick="navigate('chat','${id}')">@ ${lb}</button>`}const ga=activeDM===null?"active":"";setPanel(`<h1 style="margin-bottom:.8rem">Chat 💬</h1><div class="chat-layout"><div class="chat-sidebar"><div class="chat-room-section">Channels</div><button class="chat-room-btn ${ga}" onclick="navigate('chat')">🌐 Global</button>${fids.length?`<div class="chat-room-section">Friends</div>${btns}`:""}</div><div class="chat-main"><div class="chat-box" id="cb">Loading…</div><div style="display:flex;gap:.5rem"><input class="inp" id="cm" placeholder="Say hi..." onkeydown="if(event.key==='Enter')send()" style="margin:0"><button class="pbtn warm" style="margin:0" onclick="send()">Send</button></div></div></div>`);sub()}
+function sub(){if(chatRef){chatRef.off("value",chatCb);chatRef=null}if(!me)return;const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";chatRef=db.ref(p).limitToLast(50);chatCb=chatRef.on("value",s=>{const b=document.getElementById('cb');if(!b)return;if(!s||!s.exists()){b.innerHTML=`<p style="color:var(--muted);font-size:.82rem">No messages yet</p>`;return}let h="";s.forEach(m=>{const d=m.val(),k=m.key;if(me.blocked&&me.blocked[d.uid])return;const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.user||"?")[0]}</span>`;const ia=ADMINS.includes(d.uid);const iam=ADMINS.includes(me.uid);const db=iam?`<button class="del-msg-btn" onclick="delMsg('${p}','${k}')">🗑️</button>`:"";h+=`<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${a}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${d.user||"?"} ${ia?`<span class="admin-badge">⭐</span>`:""}</div><div class="chat-text">${d.text.replace(/</g,"&lt;")}</div></div>${db}</div>`});b.innerHTML=h;b.scrollTop=b.scrollHeight})}
+async function delMsg(p,k){if(!ADMINS.includes(me.uid))return;try{await db.ref(p+"/"+k).remove();toast("Deleted")}catch(_){toast("⚠️ Failed")}}
+async function send(){const i=document.getElementById('cm'),t=(i.value||"").trim();if(!t||!me)return;i.value="";const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";try{await db.ref(p).push({user:me.username,uid:me.uid,text:t,avatar:me.avatar||"",ts:Date.now()})}catch(e){toast("⚠️ "+e.message)}}
+
+/* Helpers */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+
+/* Particles */
+(function(){const c=document.getElementById('particles'),cols=["rgba(240,168,74,", "rgba(232,130,106,", "rgba(91,191,168,", "rgba(176,148,212,"];for(let i=0;i<18;i++){const p=document.createElement('div');p.className='particle';const sz=3+Math.random()*5;p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;bottom:-20px;background:${cols[i%4]}.55);animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*18}s`;c.appendChild(p)}})();
+</script>
+</body>
+</html>
