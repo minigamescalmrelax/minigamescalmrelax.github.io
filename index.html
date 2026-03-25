@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>[   ᴍɪɴɪ ɢᴀᴍᴇꜱ ᴄᴀʟᴍ ʀᴇʟᴀx  ]</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Lora:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:#16110e; --bg2:#1e1712; --bg3:#261d16;
@@ -19,7 +19,6 @@ body.light {
   --border:rgba(180,120,50,0.12); --border2:rgba(180,120,50,0.22);
   --text:#2e1f0e; --muted:#8a6f50;
   --nav-bg:rgba(253,246,236,0.92); --panel-bg:rgba(255,248,242,0.97);
-  --check-a:rgba(180,120,50,0.05);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -29,67 +28,115 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);over
 #checker{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(45deg,var(--check-a) 25%,transparent 25%),linear-gradient(135deg,var(--check-a) 25%,transparent 25%),linear-gradient(45deg,transparent 75%,var(--check-a) 75%),linear-gradient(135deg,transparent 75%,var(--check-a) 75%);background-size:40px 40px;background-position:0 0,20px 0,20px -20px,0 20px;animation:checkScroll 5s linear infinite}
 @keyframes checkScroll{from{background-position:0 0,20px 0,20px -20px,0 20px}to{background-position:-40px 40px,-20px 40px,-20px 20px,-40px 60px}}
 body.light #checker{opacity:.6}
-#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 80% 5%,rgba(240,168,74,.09) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 5% 90%,rgba(232,130,106,.07) 0%,transparent 70%),radial-gradient(ellipse 35% 35% at 95% 85%,rgba(91,191,168,.05) 0%,transparent 70%);animation:glowPulse 8s ease-in-out infinite alternate}
+#glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 80% 5%,rgba(240,168,74,.09) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 5% 90%,rgba(232,130,106,.07) 0%,transparent 70%);animation:glowPulse 8s ease-in-out infinite alternate}
 @keyframes glowPulse{from{opacity:.8}to{opacity:1}}
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .particle{position:absolute;border-radius:50%;opacity:0;animation:floatUp linear infinite}
 @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.6}90%{opacity:.2}100%{transform:translateY(-100vh) scale(.4);opacity:0}}
 #grain{position:fixed;inset:0;z-index:999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.035}
 
+/* Verify Banner */
+#verifyBanner{position:fixed;top:60px;left:0;right:0;z-index:450;background:linear-gradient(135deg,rgba(232,130,106,.9),rgba(240,168,74,.9));color:#1a0f00;font-weight:700;font-size:.8rem;text-align:center;padding:.45rem 1rem;display:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+#verifyBanner a{color:#1a0f00;text-decoration:underline;cursor:pointer;margin-left:.5rem}
+#verifyBanner button{background:rgba(0,0,0,.1);border:none;color:#1a0f00;padding:.2rem .6rem;border-radius:6px;cursor:pointer;margin-left:.5rem;font-weight:800}
+#verifyBanner button:hover{background:rgba(0,0,0,.2)}
+
 /* Nav */
 nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;gap:4px;padding:.75rem 1.5rem;background:var(--nav-bg);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);transition:background .4s}
-.nav-logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.9rem;letter-spacing:-.01em;color:var(--text);white-space:nowrap;margin-right:.3rem;cursor:pointer}
+.nav-logo{display:flex;align-items:center;gap:.5rem;font-weight:800;font-size:.9rem;color:var(--text);white-space:nowrap;margin-right:.3rem;cursor:pointer}
 .logo-badge{width:28px;height:28px;background:linear-gradient(135deg,var(--amber),var(--rose));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.82rem;box-shadow:0 3px 10px rgba(240,168,74,.28);flex-shrink:0}
 .nbtn{font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;padding:.42rem .9rem;border-radius:10px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted)}
 .nbtn:hover{background:rgba(255,210,140,.07);color:var(--text)}
 .nbtn.outline{border:1px solid var(--border2);color:var(--text)}
-.nbtn.outline:hover{border-color:rgba(255,210,140,.35);background:rgba(255,210,140,.04)}
 .nbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;font-weight:800;box-shadow:0 3px 14px rgba(240,168,74,.25)}
 .nbtn.warm:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(240,168,74,.35)}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:4px}
-#profileBtn{display:none;align-items:center;gap:.45rem;background:rgba(255,210,140,.07);border:1px solid var(--border2);color:var(--text);padding:.35rem .8rem .35rem .4rem;border-radius:100px;font-family:'Nunito',sans-serif;font-size:.76rem;font-weight:700;cursor:pointer;transition:all .2s}
-#profileBtn:hover{background:rgba(255,210,140,.13);transform:translateY(-1px)}
-.pav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;overflow:hidden;border:1.5px solid rgba(240,168,74,.4);background:var(--bg3)}
-.pav img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-#coinsChip{font-size:.75rem;font-weight:700;color:var(--amber);background:rgba(240,168,74,.1);border:1px solid rgba(240,168,74,.2);border-radius:100px;padding:.3rem .8rem;display:flex;align-items:center;gap:.3rem;white-space:nowrap}
-#onlineChip{font-size:.75rem;font-weight:700;color:var(--teal);background:rgba(91,191,168,.1);border:1px solid rgba(91,191,168,.2);border-radius:100px;padding:.3rem .8rem;display:flex;align-items:center;gap:.35rem;white-space:nowrap}
+#profileBtn{display:none;align-items:center;gap:.45rem;background:rgba(255,210,140,.07);border:1px solid var(--border2);color:var(--text);padding:.35rem .8rem .35rem .4rem;border-radius:100px;font-size:.76rem;font-weight:700;cursor:pointer}
+#profileBtn:hover{background:rgba(255,210,140,.13)}
+.pav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;overflow:hidden;background:var(--bg3);border:1.5px solid rgba(240,168,74,.4)}
+.pav img{width:100%;height:100%;object-fit:cover}
+#coinsChip{font-size:.75rem;font-weight:700;color:var(--amber);background:rgba(240,168,74,.1);border:1px solid rgba(240,168,74,.2);border-radius:100px;padding:.3rem .8rem}
+#onlineChip{font-size:.75rem;font-weight:700;color:var(--teal);background:rgba(91,191,168,.1);border:1px solid rgba(91,191,168,.2);border-radius:100px;padding:.3rem .8rem;display:flex;align-items:center;gap:.35rem}
 #onlineDot{width:8px;height:8px;background:#5bbfa8;border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
 
 /* Panel */
-.panel{position:relative;z-index:1;width:clamp(300px,92vw,640px);margin:6.5rem auto 3rem;padding:2.3rem;background:var(--panel-bg);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:26px;box-shadow:0 24px 70px rgba(0,0,0,.32),0 0 0 1px rgba(255,210,140,.04);text-align:center;transition:background .4s}
-.panel.animate{animation:panelIn .55s cubic-bezier(.23,1,.32,1) both}
-@keyframes panelIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
-.panel h1{font-family:'Nunito',sans-serif;font-size:1.85rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.4rem;line-height:1.15}
-.panel h1 em{font-family:'Lora',serif;font-style:italic;font-weight:400;background:linear-gradient(100deg,var(--amber),var(--amber2),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.panel>p,.info>p{font-size:.88rem;color:var(--muted);margin-bottom:1rem}
+.panel{position:relative;z-index:1;width:clamp(300px,92vw,640px);margin:6.5rem auto 3rem;padding:2.3rem;background:var(--panel-bg);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:26px;box-shadow:0 24px 70px rgba(0,0,0,.32);text-align:center;animation:panelIn .55s cubic-bezier(.23,1,.32,1) both}
+@keyframes panelIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.panel h1{font-size:1.85rem;font-weight:800;letter-spacing:-.025em;margin-bottom:.4rem}
+.panel h1 em{font-family:'Lora',serif;font-style:italic;background:linear-gradient(100deg,var(--amber),var(--amber2),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;display:block;text-align:left}
 .divider{height:1px;margin:1.3rem 0;background:linear-gradient(to right,transparent,var(--border2),transparent)}
+.info{text-align:left}
 
-/* News & Games */
-.news{text-align:left;max-height:170px;overflow-y:auto;background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;padding:.85rem 1.1rem;list-style:none}
-.news::-webkit-scrollbar{width:4px}
-.news::-webkit-scrollbar-thumb{background:rgba(240,168,74,.25);border-radius:4px}
-.news li{font-size:.82rem;color:var(--muted);padding:.36rem 0;border-bottom:1px solid var(--border)}
-.news li:last-child{border-bottom:none}
-.news li::before{content:'✦ ';color:var(--amber);font-size:.6rem}
+/* Modal */
+.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(10,7,4,.72);backdrop-filter:blur(18px);z-index:1000}
+.modal.open{display:flex}
+.mwin{width:350px;background:var(--bg2);border:1px solid var(--border2);padding:2rem;border-radius:24px;box-shadow:0 40px 80px rgba(0,0,0,.5);transform:scale(.9);opacity:0;transition:.3s cubic-bezier(.34,1.56,.64,1)}
+.modal.open .mwin{transform:none;opacity:1}
+.mbadge{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.85rem;background:rgba(240,168,74,.1)}
+.mwin h2{font-size:1.3rem;font-weight:800;margin-bottom:.2rem}
+.msub{font-size:.8rem;color:var(--muted);margin-bottom:1.2rem}
+.inp{width:100%;padding:.66rem .9rem;margin:.28rem 0;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:11px;font-family:'Nunito',sans-serif;font-size:.87rem;color:var(--text);outline:none}
+.inp:focus{border-color:var(--amber)}
+.pbtn{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;padding:.56rem 1.3rem;border-radius:12px;border:none;cursor:pointer;transition:all .22s;display:inline-block;margin-top:.4rem}
+.pbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;box-shadow:0 3px 14px rgba(240,168,74,.22)}
+.pbtn.out{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.mswitch{text-align:center;margin-top:.9rem;font-size:.77rem;color:var(--muted)}
+.mswitch a{color:var(--amber);cursor:pointer;font-weight:700}
+
+/* Chat */
+.chat-layout{display:grid;grid-template-columns:180px 1fr;gap:1rem;margin-top:.8rem;text-align:left}
+.chat-sidebar{display:flex;flex-direction:column;gap:.35rem}
+.chat-room-btn{font-size:.78rem;font-weight:700;padding:.5rem .75rem;border-radius:10px;border:none;cursor:pointer;background:transparent;color:var(--muted);text-align:left;width:100%}
+.chat-room-btn:hover{background:rgba(255,210,140,.07);color:var(--text)}
+.chat-room-btn.active{background:rgba(255,210,140,.1);color:var(--amber);border:1px solid rgba(255,210,140,.15)}
+.chat-room-section{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:.4rem .75rem .2rem;margin-top:.3rem}
+.chat-box{height:240px;overflow-y:auto;background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;padding:.75rem 1rem}
+.chat-msg{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.5rem;position:relative}
+.chat-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;overflow:hidden;cursor:pointer;flex-shrink:0}
+.chat-av img{width:100%;height:100%;object-fit:cover}
+.chat-body{font-size:.82rem;line-height:1.5;flex-grow:1;word-break:break-word}
+.chat-user{font-weight:800;color:var(--amber);font-size:.74rem;margin-bottom:.08rem;cursor:pointer;display:inline-block}
+.chat-text{color:var(--text)}
+.del-msg-btn{position:absolute;right:0;top:0;font-size:.7rem;cursor:pointer;opacity:0;color:var(--muted);background:none;border:none}
+.chat-msg:hover .del-msg-btn{opacity:1}
+.del-msg-btn:hover{color:var(--rose)}
+.admin-badge{font-size:.6rem;font-weight:700;background:linear-gradient(135deg,var(--rose),#d66a5a);color:#fff;padding:.18rem .45rem;border-radius:6px;margin-left:.4rem;vertical-align:middle}
+.admin-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.ban-btn{font-size:.78rem;font-weight:700;padding:.45rem 1rem;border-radius:10px;border:1px solid rgba(232,130,106,.3);background:rgba(232,130,106,.08);color:var(--rose);cursor:pointer}
+
+/* Search & Games */
 .games-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-top:1rem}
-.gtile{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:16px;padding:1.1rem;text-align:left;cursor:pointer;transition:all .3s cubic-bezier(.23,1,.32,1);position:relative;overflow:hidden;animation:tileIn .4s cubic-bezier(.23,1,.32,1) both}
-.gtile:nth-child(1){animation-delay:.05s}.gtile:nth-child(2){animation-delay:.1s}.gtile:nth-child(3){animation-delay:.15s}.gtile:nth-child(4){animation-delay:.2s}
-@keyframes tileIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
-.gtile::before{content:'';position:absolute;inset:0;border-radius:16px;opacity:0;transition:opacity .3s}
-.gtile:nth-child(1)::before{background:radial-gradient(ellipse at top left,rgba(240,168,74,.11),transparent 65%)}
-.gtile:nth-child(2)::before{background:radial-gradient(ellipse at top left,rgba(91,191,168,.11),transparent 65%)}
-.gtile:nth-child(3)::before{background:radial-gradient(ellipse at top left,rgba(232,130,106,.11),transparent 65%)}
-.gtile:nth-child(4)::before{background:radial-gradient(ellipse at top left,rgba(176,148,212,.11),transparent 65%)}
-.gtile:hover{border-color:var(--border2);transform:translateY(-4px) scale(1.01);box-shadow:0 12px 32px rgba(0,0,0,.25)}
-.gtile:hover::before{opacity:1}
+.gtile{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:16px;padding:1.1rem;text-align:left;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.gtile:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
 .ticon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:.6rem}
-.t1{background:rgba(240,168,74,.12)}.t2{background:rgba(91,191,168,.12)}.t3{background:rgba(232,130,106,.12)}.t4{background:rgba(176,148,212,.12)}
-.tname{font-weight:800;font-size:.88rem;letter-spacing:-.01em;margin-bottom:.18rem;color:var(--text);position:relative;z-index:1}
+.tname{font-weight:800;font-size:.88rem;margin-bottom:.18rem;color:var(--text);position:relative;z-index:1}
 .ttag{font-size:.64rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;position:relative;z-index:1}
 .gtile:nth-child(1) .ttag{color:var(--amber)}.gtile:nth-child(2) .ttag{color:var(--teal)}.gtile:nth-child(3) .ttag{color:var(--rose)}.gtile:nth-child(4) .ttag{color:var(--lilac)}
-.info{text-align:left}.info h1{margin-bottom:.9rem}
+.gtile:nth-child(1) .ticon{background:rgba(240,168,74,.12)}.gtile:nth-child(2) .ticon{background:rgba(91,191,168,.12)}.gtile:nth-child(3) .ticon{background:rgba(232,130,106,.12)}.gtile:nth-child(4) .ticon{background:rgba(176,148,212,.12)}
+.search-bar-wrap{position:relative;margin-bottom:1rem}
+.search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:1rem;opacity:.5}
+.search-tabs{display:flex;gap:.35rem;margin-bottom:1rem}
+.stab{font-size:.72rem;font-weight:700;padding:.35rem .85rem;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer}
+.stab:hover{background:rgba(255,210,140,.07);color:var(--text)}
+.stab.active{background:rgba(240,168,74,.12);border-color:rgba(240,168,74,.35);color:var(--amber)}
+.search-section-lbl{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:1rem 0 .5rem;display:block}
+.game-cards{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.5rem}
+.game-card{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s;text-align:left}
+.game-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
+.game-card-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.game-card-body{padding:.55rem .7rem .6rem}
+.game-card-name{font-weight:800;font-size:.82rem;color:var(--text);margin-bottom:.18rem}
+.game-card-meta{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.game-card-tag{font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.15rem .45rem;border-radius:100px}
+.game-card-badge{font-size:.58rem;font-weight:700;padding:.12rem .38rem;border-radius:6px;background:rgba(91,191,168,.15);color:var(--teal)}
+.result-item{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border-radius:12px;background:rgba(255,210,140,.03);border:1px solid var(--border);margin-bottom:.45rem;font-size:.84rem;font-weight:600;cursor:pointer}
+.result-item:hover{border-color:var(--border2);background:rgba(255,210,140,.07)}
+.fav{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.85rem;overflow:hidden;border:1.5px solid var(--border2)}
+.fav img{width:100%;height:100%;object-fit:cover}
+.pbtn.sm{padding:.3rem .6rem;font-size:.7rem;margin-top:0}
+.no-results{text-align:center;padding:2rem 0;color:var(--muted);font-size:.85rem}
 
 /* Profile */
 .prof-wrap{display:flex;flex-direction:column;align-items:center;gap:.5rem}
@@ -97,98 +144,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 @keyframes avPop{from{transform:scale(.5) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
 .av-inner{width:100%;height:100%;border-radius:50%;background:var(--bg2);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2.4rem}
 .av-inner img{width:100%;height:100%;object-fit:cover}
-.prof-wrap h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
-.upload-lbl{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.77rem;font-weight:700;color:var(--muted);background:rgba(255,210,140,.05);border:1px solid var(--border2);border-radius:10px;padding:.42rem .9rem;transition:all .2s;margin-top:.2rem}
+.upload-lbl{display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.77rem;font-weight:700;color:var(--muted);background:rgba(255,210,140,.05);border:1px solid var(--border2);border-radius:10px;padding:.42rem .9rem;margin-top:.2rem}
 .upload-lbl:hover{background:rgba(255,210,140,.1);color:var(--text)}
 .upload-lbl input{display:none}
-.prof-actions{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-top:.8rem}
 
-/* Chat */
-.chat-layout{display:grid;grid-template-columns:180px 1fr;gap:1rem;margin-top:.8rem;text-align:left}
-.chat-sidebar{display:flex;flex-direction:column;gap:.35rem}
-.chat-room-btn{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;padding:.5rem .75rem;border-radius:10px;border:none;cursor:pointer;text-align:left;transition:all .2s;background:transparent;color:var(--muted);width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chat-room-btn:hover{background:rgba(255,210,140,.07);color:var(--text)}
-.chat-room-btn.active{background:rgba(255,210,140,.1);color:var(--amber);border:1px solid rgba(255,210,140,.15)}
-.chat-room-section{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:.4rem .75rem .2rem;margin-top:.3rem}
-.chat-main{display:flex;flex-direction:column;gap:.6rem}
-.chat-box{height:240px;overflow-y:auto;background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;padding:.75rem 1rem}
-.chat-box::-webkit-scrollbar{width:4px}
-.chat-box::-webkit-scrollbar-thumb{background:rgba(240,168,74,.2);border-radius:4px}
-.chat-msg{display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.5rem;position:relative}
-.chat-av{width:28px;height:28px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0;overflow:hidden;cursor:pointer}
-.chat-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.chat-body{font-size:.82rem;line-height:1.5;flex-grow:1}
-.chat-user{font-weight:800;color:var(--amber);font-size:.74rem;margin-bottom:.08rem;cursor:pointer;display:inline-block}
-.chat-user:hover{text-decoration:underline}
-.chat-text{color:var(--text);word-break:break-word}
-.chat-input-row{display:flex;gap:.5rem}
-
-/* Search */
-.search-bar-wrap{position:relative;margin-bottom:1rem}
-.search-bar-wrap .inp{padding-left:2.4rem;font-size:.95rem}
-.search-icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;opacity:.5}
-.search-tabs{display:flex;gap:.35rem;margin-bottom:1rem}
-.stab{font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;padding:.35rem .85rem;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
-.stab:hover{background:rgba(255,210,140,.07);color:var(--text)}
-.stab.active{background:rgba(240,168,74,.12);border-color:rgba(240,168,74,.35);color:var(--amber)}
-.search-section-lbl{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:1rem 0 .5rem;display:block;text-align:left}
-.game-cards{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.5rem}
-.game-card{background:rgba(255,210,140,.03);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .25s cubic-bezier(.23,1,.32,1);text-align:left}
-.game-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.25)}
-.game-card-thumb{height:72px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative}
-.game-card-body{padding:.55rem .7rem .6rem}
-.game-card-name{font-weight:800;font-size:.82rem;letter-spacing:-.01em;color:var(--text);margin-bottom:.18rem}
-.game-card-meta{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
-.game-card-tag{font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:.15rem .45rem;border-radius:100px}
-.game-card-players{font-size:.65rem;color:var(--muted);font-weight:600}
-.game-card-badge{font-size:.58rem;font-weight:700;padding:.12rem .38rem;border-radius:6px;background:rgba(91,191,168,.15);color:var(--teal);letter-spacing:.04em;text-transform:uppercase}
-.search-results{text-align:left}
-.result-item{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;border-radius:12px;background:rgba(255,210,140,.03);border:1px solid var(--border);margin-bottom:.45rem;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s}
-.result-item:hover{border-color:var(--border2);background:rgba(255,210,140,.07)}
-.fav{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;overflow:hidden;border:1.5px solid var(--border2)}
-.fav img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.result-friend-chip{font-size:.6rem;font-weight:700;color:var(--teal);background:rgba(91,191,168,.1);border:1px solid rgba(91,191,168,.2);border-radius:100px;padding:.12rem .4rem;margin-left:.3rem}
-.no-results{text-align:center;padding:2rem 0;color:var(--muted);font-size:.85rem}
-
-/* Admin & Block Badges */
-.admin-badge{font-size:.6rem;font-weight:700;background:linear-gradient(135deg,var(--rose),#d66a5a);color:#fff;padding:.18rem .45rem;border-radius:6px;margin-left:.4rem;text-transform:uppercase;letter-spacing:.03em;box-shadow:0 2px 6px rgba(232,130,106,.3);vertical-align:middle}
-.del-msg-btn{position:absolute;right:0;top:0;font-size:.7rem;cursor:pointer;opacity:0;transition:opacity .2s;color:var(--muted);background:none;border:none;line-height:1}
-.chat-msg:hover .del-msg-btn{opacity:1}
-.del-msg-btn:hover{color:var(--rose)}
-.admin-actions{margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
-
-/* Buttons */
-.pbtn{font-family:'Nunito',sans-serif;font-size:.82rem;font-weight:700;padding:.56rem 1.3rem;border-radius:12px;border:none;cursor:pointer;transition:all .22s;display:inline-block;margin-top:.4rem}
-.pbtn.warm{background:linear-gradient(135deg,var(--amber),#e8923a);color:#1a0f00;box-shadow:0 3px 14px rgba(240,168,74,.22)}
-.pbtn.warm:hover{transform:translateY(-1px);box-shadow:0 7px 22px rgba(240,168,74,.32)}
-.pbtn.out{background:transparent;color:var(--text);border:1px solid var(--border2)}
-.pbtn.out:hover{border-color:rgba(255,210,140,.35);background:rgba(255,210,140,.04)}
-.pbtn.danger{background:rgba(232,130,106,.1);color:var(--rose);border:1px solid rgba(232,130,106,.2)}
-.pbtn.danger:hover{background:rgba(232,130,106,.18);transform:translateY(-1px)}
-.pbtn.sm{padding:.3rem .6rem;font-size:.7rem;margin-top:0}
-.ban-btn{font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;padding:.45rem 1rem;border-radius:10px;border:1px solid rgba(232,130,106,.3);cursor:pointer;transition:all .22s;background:rgba(232,130,106,.08);color:var(--rose)}
-.ban-btn:hover{background:rgba(232,130,106,.18);transform:translateY(-1px)}
-
-/* Inputs */
-.inp{width:100%;padding:.66rem .9rem;margin:.28rem 0;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:11px;font-family:'Nunito',sans-serif;font-size:.87rem;color:var(--text);outline:none;transition:border-color .2s}
-.inp::placeholder{color:rgba(138,116,96,.45)}
-.inp:focus{border-color:var(--amber)}
-
-/* Modal */
-.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(10,7,4,.72);backdrop-filter:blur(18px);z-index:1000}
-.modal.open{display:flex}
-.mwin{width:350px;background:var(--bg2);border:1px solid var(--border2);padding:2rem;border-radius:24px;box-shadow:0 40px 80px rgba(0,0,0,.5);transform:scale(.9) translateY(16px);opacity:0;transition:.3s cubic-bezier(.34,1.56,.64,1)}
-.modal.open .mwin{transform:none;opacity:1}
-.mbadge{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.85rem;background:rgba(240,168,74,.1)}
-.mwin h2{font-size:1.3rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem;color:var(--text)}
-.msub{font-size:.8rem;color:var(--muted);margin-bottom:1.2rem}
-.mwin .inp{margin:.3rem 0}
-.mwin .pbtn{width:100%;margin-top:.5rem;font-size:.87rem;padding:.7rem;border-radius:12px}
-.mswitch{text-align:center;margin-top:.9rem;font-size:.77rem;color:var(--muted)}
-.mswitch a{color:var(--amber);cursor:pointer;font-weight:700}
-
-/* Toast */
-#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(10px);background:var(--bg3);border:1px solid var(--border2);border-radius:100px;padding:.65rem 1.4rem;font-size:.8rem;font-weight:700;color:var(--text);z-index:2000;opacity:0;transition:all .3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4);pointer-events:none}
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:100px;padding:.65rem 1.4rem;font-size:.8rem;font-weight:700;z-index:2000;opacity:0;transition:all .3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.4);pointer-events:none}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -199,54 +159,40 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 <div id="particles"></div>
 <div id="grain"></div>
 
-<!-- NAV -->
+<!-- VERIFY BANNER -->
+<div id="verifyBanner">
+  ⚠️ Your email is not verified. Some features may be limited. 
+  <button onclick="resendVerification()">Resend Email</button>
+  <button onclick="checkVerification()">I have verified</button>
+</div>
+
 <nav>
-  <div class="nav-logo" onclick="navigate('home')">
-    <div class="logo-badge">🎮</div>
-    Mini Games Calm Relax
-  </div>
+  <div class="nav-logo" onclick="navigate('home')"><div class="logo-badge">🎮</div>Mini Games Calm Relax</div>
   <button class="nbtn" onclick="navigate('home')">Home</button>
   <button class="nbtn" onclick="navigate('about')">About</button>
-  <button class="nbtn" onclick="navigate('support')">Support</button>
   <button class="nbtn" onclick="navigate('games')">Games</button>
   <button class="nbtn" id="chatNavBtn" style="display:none" onclick="navigate('chat')">Chat</button>
-
   <div class="nav-right">
-    <button class="nbtn outline" onclick="navigate('search')" style="font-size:1rem;padding:.42rem .7rem" title="Search">🔍</button>
-    <button class="nbtn outline" id="loginBtn"  onclick="openLogin()">Log in</button>
-    <button class="nbtn warm"    id="signupBtn" onclick="openSignup()">Sign up</button>
-    <button id="profileBtn" onclick="navigate('profile')">
-      <div class="pav" id="pav">😊</div>
-      <span id="pavName">Profile</span>
-    </button>
-    <button class="nbtn" id="themeBtn" onclick="toggleTheme()" style="font-size:1rem;padding:.42rem .65rem">🌙</button>
+    <button class="nbtn outline" onclick="navigate('search')">🔍</button>
+    <button class="nbtn outline" id="loginBtn" onclick="openLogin()">Log in</button>
+    <button class="nbtn warm" id="signupBtn" onclick="openSignup()">Sign up</button>
+    <button id="profileBtn" onclick="navigate('profile')"><div class="pav" id="pav">?</div><span id="pavName">Profile</span></button>
+    <button class="nbtn" id="themeBtn" onclick="toggleTheme()">🌙</button>
     <div id="coinsChip">🪙 <span id="coinCount">0</span></div>
-    <div id="onlineChip"><div id="onlineDot"></div><span id="onlineCount">0</span> Online</div>
+    <div id="onlineChip"><div id="onlineDot"></div><span id="onlineCount">0</span></div>
   </div>
 </nav>
 
-<!-- MAIN PANEL -->
-<div class="panel animate" id="panel">
-  <h1>Welcome to <em>Mini Games Calm Relax!</em></h1>
-  <p>A cozy little corner of the internet.</p>
-  <div class="divider"></div>
-  <span class="lbl">Latest news</span>
-  <ul class="news"><li>No recent news — check back soon!</li></ul>
-</div>
+<div class="panel animate" id="panel"></div>
 
-<!-- MODAL -->
-<div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
-  <div class="mwin" id="mwin"></div>
-</div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="mwin" id="mwin"></div></div>
 <div id="toast"></div>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
-/* ── FIREBASE CONFIG ── */
+/* ── CONFIG ── */
 const firebaseConfig = {
   apiKey: "AIzaSyAqEqV8SunMJe5gC4vo-71sB54UFig2fWw",
   authDomain: "mini-games-calm-relax-70452.firebaseapp.com",
@@ -256,181 +202,149 @@ const firebaseConfig = {
   messagingSenderId: "253454230173",
   appId: "1:253454230173:web:963700f752bfccda78ea74"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.database();
+const ADMINS = []; // Put your UID here
 
-// ADMINS: Put your new User ID here after you create an account!
-const ADMINS = ["0jxFnJ52L4WiWSpFPR1rAkg8ZkI2"];
+var me=null, chatRef=null, chatCb=null, isLight=false, activeDM=null, currentPath="home", isBanned=false, unverifiedMode=false;
 
-/* ── STATE ── */
-var me          = null;
-var chatRef     = null;
-var chatCb      = null;
-var isLight     = false;
-var activeDM    = null;
-var currentPath = "home";
-var isBanned    = false;
-
-/* ── PRESENCE ── */
-function initPresence() {
-  const presenceRef = db.ref("presence");
-  let sessionId = localStorage.getItem('sessionId');
-  if (!sessionId) { sessionId = Math.random().toString(36).substr(2, 9); localStorage.setItem('sessionId', sessionId); }
-  const myPresenceRef = presenceRef.child(sessionId);
-  db.ref(".info/connected").on("value", snap => { if (snap.val() === true) { myPresenceRef.set(true); myPresenceRef.onDisconnect().remove(); } });
-  presenceRef.on("value", snap => { const el = document.getElementById("onlineCount"); if (el) el.textContent = snap.numChildren(); });
+function initPresence(){
+  const ref=db.ref("presence"); let sid=localStorage.getItem('sid')||Math.random().toString(36).substr(2,9); localStorage.setItem('sid',sid);
+  db.ref(".info/connected").on("value",s=>{if(s.val()===true){ref.child(sid).set(true);ref.child(sid).onDisconnect().remove()}});
+  ref.on("value",s=>document.getElementById('onlineCount').textContent=s.numChildren());
 }
 initPresence();
 
-/* ── TOAST / THEME / PANEL ── */
-function toast(msg, ms = 2600) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), ms); }
-function toggleTheme() { isLight = !isLight; document.body.classList.toggle("light", isLight); document.getElementById("themeBtn").textContent = isLight ? "☀️" : "🌙"; }
-function setPanel(html) { unsubscribeChat(); const el = document.getElementById("panel"); el.classList.remove("animate"); el.innerHTML = html; requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add("animate"); }); }); }
-function unsubscribeChat() { if (chatRef && chatCb) { chatRef.off("value", chatCb); chatRef = null; chatCb = null; } }
-
-/* ── ROUTING ── */
-function navigate(page, arg) { let hash = page; if (arg) hash += "/" + arg; if (page === 'home' && !arg) { try { history.pushState({ page: 'home' }, document.title, window.location.pathname); } catch (_) { } handleRoute(); } else { window.location.hash = hash; } }
-function handleRoute() { const hash = window.location.hash.slice(1) || "home"; const parts = hash.split("/"); const page = parts[0]; const arg = parts[1]; currentPath = page; if (!me && page === 'chat') { toast("⚠️ Log in first."); navigate('home'); return; } switch (page) { case 'about': renderAbout(); break; case 'support': renderSupport(); break; case 'games': renderGames(); break; case 'search': renderSearch(); break; case 'chat': activeDM = arg || null; renderChat(); break; case 'profile': arg ? renderUserProfile(arg) : renderProfile(); break; case 'home': default: renderHome(); break; } }
-window.addEventListener('hashchange', handleRoute); window.addEventListener('popstate', handleRoute);
+function toast(m,ms=2600){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+function toggleTheme(){isLight=!isLight;document.body.classList.toggle('light',isLight);document.getElementById('themeBtn').textContent=isLight?"☀️":"🌙"}
+function setPanel(h){if(chatRef){chatRef.off("value",chatCb);chatRef=null}const el=document.getElementById('panel');el.classList.remove("animate");el.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("animate")))}
+function navigate(p,a){let h=p;if(a)h+="/"+a;if(p==='home'){try{history.pushState({},'',location.pathname)}catch(_){}handleRoute()}else location.hash=h}
+function handleRoute(){const h=location.hash.slice(1)||"home";const [p,a]=h.split("/");currentPath=p;if(!me&&p==='chat'){toast("⚠️ Log in first.");navigate('home');return}switch(p){case'about':renderAbout();break;case'games':renderGames();break;case'search':renderSearch();break;case'chat':activeDM=a||null;renderChat();break;case'profile':a?renderUserProfile(a):renderProfile();break;default:renderHome()}}
+window.addEventListener('hashchange',handleRoute);window.addEventListener('popstate',handleRoute);
 
 /* ── AUTH ── */
 firebase.auth().onAuthStateChanged(async user => {
-  if (isBanned) return;
-  if (user) {
-    const banSnap = await db.ref("banned/" + user.uid).once("value");
-    if (banSnap.exists()) { isBanned = true; toast("⚠️ You are banned."); await auth.signOut(); return; }
-
-    // --- EMAIL VERIFICATION CHECK ---
-    if (!user.emailVerified) {
-      me = { uid: user.uid, email: user.email, username: user.email.split('@')[0] }; // Temp minimal profile
-      renderVerifyEmail();
+  if(isBanned)return;
+  if(user){
+    // Ban check
+    const b=await db.ref("banned/"+user.uid).once("value");if(b.exists()){isBanned=true;toast("⚠️ Banned");await auth.signOut();return}
+    
+    // Email Verification check
+    if(!user.emailVerified){
+      unverifiedMode = true;
+      document.getElementById('verifyBanner').style.display = 'block';
+      // We still let them in, but with a minimal 'me' object if not in DB
+      const snap=await db.ref("users/"+user.uid).get();
+      if(snap.exists()){
+        const d=snap.val();me={uid:user.uid,username:d.username||"User",coins:d.coins||0,avatar:d.avatar||"",friends:d.friends||{},blocked:d.blocked||{},sentRequests:d.sentRequests||{}};
+      } else {
+        me={uid:user.uid,username:user.email.split('@')[0],coins:0,avatar:"",friends:{},blocked:{},sentRequests:{}};
+      }
+      onLoggedIn(); // Log them in UI-wise
+      handleRoute();
       return;
     }
-    // ---------------------------------
-
-    const snap = await db.ref("users/" + user.uid).get();
-    if (snap.exists()) { const data = snap.val(); me = { uid: user.uid, username: data.username || "User", coins: data.coins || 0, avatar: data.avatar || "", friends: data.friends || {}, blocked: data.blocked || {}, sentRequests: data.sentRequests || {} }; }
-    else { me = { uid: user.uid, username: user.email.split('@')[0], coins: 0, avatar: "", friends: {}, blocked: {}, sentRequests: {} }; await db.ref("users/" + user.uid).set(me); }
+    
+    // Verified User
+    unverifiedMode = false;
+    document.getElementById('verifyBanner').style.display = 'none';
+    const snap=await db.ref("users/"+user.uid).get();
+    if(snap.exists()){const d=snap.val();me={uid:user.uid,username:d.username||"User",coins:d.coins||0,avatar:d.avatar||"",friends:d.friends||{},blocked:d.blocked||{},sentRequests:d.sentRequests||{}}}
+    else{me={uid:user.uid,username:user.email.split('@')[0],coins:0,avatar:"",friends:{},blocked:{},sentRequests:{}};await db.ref("users/"+user.uid).set(me)}
     onLoggedIn();
-  } else { isBanned = false; me = null; onLoggedOut(); }
+  }else{isBanned=false;me=null;unverifiedMode=false;document.getElementById('verifyBanner').style.display='none';onLoggedOut()}
   handleRoute();
 });
 
-function onLoggedIn() {
-  document.getElementById("loginBtn").style.display = "none"; document.getElementById("signupBtn").style.display = "none"; document.getElementById("profileBtn").style.display = "flex"; document.getElementById("chatNavBtn").style.display = "inline-block"; document.getElementById("coinCount").textContent = me.coins || 0; document.getElementById("pavName").textContent = me.username;
-  const pav = document.getElementById("pav"); if (me.avatar) { pav.innerHTML = `<img src="${me.avatar}" alt="">`; } else { pav.textContent = me.username[0].toUpperCase(); }
-  db.ref("friendRequests/" + me.uid).on("value", snap => { const count = snap.exists() ? snap.numChildren() : 0; const btn = document.getElementById("profileBtn"); const old = document.getElementById("reqBadge"); if (old) old.remove(); if (count > 0) { const badge = document.createElement("span"); badge.id = "reqBadge"; badge.textContent = count; badge.style.cssText = "background:var(--rose);color:#fff;font-size:.6rem;font-weight:800;padding:.1rem .38rem;border-radius:100px;line-height:1.4;"; btn.appendChild(badge); } });
+function onLoggedIn(){
+  document.getElementById('loginBtn').style.display='none';document.getElementById('signupBtn').style.display='none';
+  document.getElementById('profileBtn').style.display='flex';document.getElementById('chatNavBtn').style.display='inline-block';
+  document.getElementById('coinCount').textContent=me.coins||0;document.getElementById('pavName').textContent=me.username;
+  const p=document.getElementById('pav');me.avatar?p.innerHTML=`<img src="${me.avatar}">`:p.textContent=me.username[0].toUpperCase();
+  db.ref("friendRequests/"+me.uid).on("value",s=>{const c=s.exists()?s.numChildren():0;const b=document.getElementById('profileBtn');const o=document.getElementById('rbadge');if(o)o.remove();if(c>0){const d=document.createElement("span");d.id='rbadge';d.textContent=c;d.style.cssText="background:var(--rose);color:#fff;font-size:.6rem;font-weight:800;padding:.1rem .38rem;border-radius:100px";b.appendChild(d)}});
 }
-function onLoggedOut() { document.getElementById("loginBtn").style.display = "inline-block"; document.getElementById("signupBtn").style.display = "inline-block"; document.getElementById("profileBtn").style.display = "none"; document.getElementById("chatNavBtn").style.display = "none"; document.getElementById("coinCount").textContent = 0; if (me) db.ref("friendRequests/" + me.uid).off("value"); const old = document.getElementById("reqBadge"); if (old) old.remove(); }
+function onLoggedOut(){document.getElementById('loginBtn').style.display='inline-block';document.getElementById('signupBtn').style.display='inline-block';document.getElementById('profileBtn').style.display='none';document.getElementById('chatNavBtn').style.display='none';document.getElementById('coinCount').textContent=0;if(me)db.ref("friendRequests/"+me.uid).off();const o=document.getElementById('rbadge');if(o)o.remove()}
 
-/* ── EMAIL VERIFICATION RENDER ── */
-function renderVerifyEmail() {
-  setPanel(`
-    <div class="info">
-      <h1>Verify your Email 📧</h1>
-      <div class="divider"></div>
-      <p>We sent a verification link to <strong>${me.email || 'your email address'}</strong>.</p>
-      <p style="margin-top:1rem">Please check your inbox and click the link to activate your account.</p>
-      <div style="margin-top:1.5rem">
-        <button class="pbtn warm" onclick="checkVerification()">I Have Verified</button>
-        <button class="pbtn out" style="margin-left:.5rem" onclick="resendVerification()">Resend Email</button>
-      </div>
-      <p class="mswitch" style="margin-top:1.5rem">Wrong email? <a onclick="doLogout()">Log out</a></p>
-    </div>
-  `);
+/* ── VERIFY HANDLERS ── */
+async function resendVerification() {
+  if(!auth.currentUser) return;
+  try { await auth.currentUser.sendEmailVerification(); toast("📧 Verification email sent!"); } 
+  catch(e) { toast("⚠️ "+e.message); }
 }
 
 async function checkVerification() {
   if(!auth.currentUser) return;
   toast("Checking...");
   await auth.currentUser.reload();
-  // The onAuthStateChanged listener will fire again automatically if the state changes (e.g. verified)
-  // But we manually trigger a re-check by accessing currentUser again
-  const user = auth.currentUser;
-  if(user && user.emailVerified) {
+  if(auth.currentUser.emailVerified) {
     toast("✅ Email Verified!");
-    // The onAuthStateChanged will handle the rest automatically now.
+    document.getElementById('verifyBanner').style.display = 'none';
+    unverifiedMode = false;
+    // Force refresh state
+    location.reload();
   } else {
-    toast("⚠️ Email not verified yet.");
+    toast("⚠️ Not verified yet.");
   }
 }
 
-async function resendVerification() {
-  if(!auth.currentUser) return;
-  try {
-    await auth.currentUser.sendEmailVerification();
-    toast("📧 Verification email sent!");
-  } catch(e) { toast("⚠️ " + e.message); }
-}
-
-/* ── MODAL ── */
-function openModal(html) { document.getElementById("mwin").innerHTML = html; document.getElementById("modal").classList.add("open"); }
-function closeModal() { document.getElementById("modal").classList.remove("open"); }
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+function openModal(h){document.getElementById('mwin').innerHTML=h;document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 
 /* ── SIGN UP ── */
-function openSignup() { openModal(`<div class="mbadge" style="background:rgba(91,191,168,.1)">✨</div><h2>Join the fun</h2><p class="msub">Create your free account</p><input class="inp" id="suEmail" type="email" placeholder="Email"><input class="inp" id="suUsername" placeholder="Username"><input class="inp" id="suPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doSignup()">Create account</button><p class="mswitch">Already registered? <a onclick="openLogin()">Log in</a></p>`); }
-async function doSignup() { const email = document.getElementById("suEmail").value.trim(); const username = document.getElementById("suUsername").value.trim(); const pass = document.getElementById("suPass").value; if (!email || !username || !pass) { toast("⚠️ Fill in all fields."); return; } if (pass.length < 6) { toast("⚠️ Password must be at least 6 characters."); return; } try { const cred = await auth.createUserWithEmailAndPassword(email, pass); const data = { username, coins: 0, avatar: "", friends: {}, blocked: {} }; await db.ref("users/" + cred.user.uid).set(data); await cred.user.sendEmailVerification(); await auth.signOut(); // Log out immediately so they verify first
-  closeModal(); toast("🎉 Account created! Check your email to verify."); } catch (e) { toast("⚠️ " + e.message); } }
+function openSignup(){openModal(`<div class="mbadge" style="background:rgba(91,191,168,.1)">✨</div><h2>Join the fun</h2><p class="msub">Create your free account</p><input class="inp" id="suEmail" type="email" placeholder="Email"><input class="inp" id="suUser" placeholder="Username"><input class="inp" id="suPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doSignup()">Create account</button><p class="mswitch">Already registered? <a onclick="openLogin()">Log in</a></p>`)}
+async function doSignup(){const e=document.getElementById('suEmail').value.trim(),u=document.getElementById('suUser').value.trim(),p=document.getElementById('suPass').value;if(!e||!u||!p){toast("⚠️ Fill all fields");return}if(p.length<6){toast("⚠️ 6+ chars");return}try{const c=await auth.createUserWithEmailAndPassword(e,p);await db.ref("users/"+c.user.uid).set({username:u,coins:0,avatar:"",friends:{},blocked:{}});await c.user.sendEmailVerification();closeModal();toast("🎉 Account created! Check your email to verify.");}catch(e){toast("⚠️ "+e.message)}}
 
 /* ── LOG IN ── */
-function openLogin() { openModal(`<div class="mbadge">👋</div><h2>Welcome back</h2><p class="msub">Log in to your account</p><input class="inp" id="liEmail" type="email" placeholder="Email"><input class="inp" id="liPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doLogin()">Log in</button><p class="mswitch"><a onclick="resetPassword()">Forgot Password?</a></p><p class="mswitch">No account? <a onclick="openSignup()">Sign up free</a></p>`); }
-async function doLogin() { const email = document.getElementById("liEmail").value.trim(); const pass = document.getElementById("liPass").value; try { await auth.signInWithEmailAndPassword(email, pass); closeModal(); } catch (e) { toast("⚠️ Incorrect email or password."); } }
-async function resetPassword() { const email = document.getElementById("liEmail").value.trim(); if (!email) { toast("⚠️ Please enter your email above first."); return; } try { await auth.sendPasswordResetEmail(email); toast("✅ Password reset email sent!"); closeModal(); } catch (e) { toast("⚠️ " + e.message); } }
-
-/* ── LOGOUT HELPER ── */
-async function doLogout() { try { await auth.signOut(); toast("Logged out 👋"); } catch(e) { toast("⚠️ " + e.message); } }
+function openLogin(){openModal(`<div class="mbadge">👋</div><h2>Welcome back</h2><p class="msub">Log in</p><input class="inp" id="liEmail" type="email" placeholder="Email"><input class="inp" id="liPass" type="password" placeholder="Password"><button class="pbtn warm" onclick="doLogin()">Log in</button><p class="mswitch"><a onclick="resetPass()">Forgot Password?</a></p><p class="mswitch">No account? <a onclick="openSignup()">Sign up</a></p>`)}
+async function doLogin(){const e=document.getElementById('liEmail').value.trim(),p=document.getElementById('liPass').value;try{await auth.signInWithEmailAndPassword(e,p);closeModal()}catch(_){toast("⚠️ Incorrect credentials")}}
+async function resetPass(){const e=document.getElementById('liEmail').value.trim();if(!e){toast("⚠️ Enter email");return}try{await auth.sendPasswordResetEmail(e);toast("✅ Email sent!");closeModal()}catch(e){toast("⚠️ "+e.message)}}
 
 /* ── PAGES ── */
-function renderHome() { setPanel(`<h1>Welcome to <em>Mini Games Calm Relax!</em></h1><p>A cozy little corner of the internet.</p><div class="divider"></div><span class="lbl">Latest news</span><ul class="news"><li>No recent news — check back soon!</li></ul>`); }
-function renderAbout() { setPanel(`<div class="info"><h1>About 🍵</h1><div class="divider"></div><p>Mini Games Calm Relax is a cozy site for people who want to play something fun without stress or pressure.</p><p>No timers counting you down. No leaderboards. Just you, the game, and a good time.</p><p>Hosted on <strong style="color:var(--amber)">GitHub</strong>. 🐙</p></div>`); }
-function renderSupport() { setPanel(`<div class="info"><h1>Support 💛</h1><div class="divider"></div><p>Having issues or want to say hi? Join our Discord community!</p><button class="pbtn warm" onclick="window.open('https://discord.gg/ekgbMfPeN4','_blank')">Join Discord</button><button class="pbtn out" style="margin-left:.5rem" onclick="toast('Donations coming soon! 💛')">Donate ♥</button></div>`); }
-function renderGames() { setPanel(`<h1>Games 🎮</h1><p>Pick what you're feeling today.</p><div class="games-grid"><div class="gtile" onclick="toast('Sprunki coming soon! 🎵')"><div class="ticon t1">🎵</div><div class="tname">Sprunki</div><div class="ttag">Music</div></div><div class="gtile" onclick="toast('Platform Chicken coming soon! 🐔')"><div class="ticon t2">🐔</div><div class="tname">Platform Chicken</div><div class="ttag">Platformer</div></div><div class="gtile" onclick="toast('2048 coming soon! 🔢')"><div class="ticon t3">🔢</div><div class="tname">2048</div><div class="ttag">Puzzle</div></div><div class="gtile" onclick="window.open('https://freebaldi.github.io/','_blank')"><div class="ticon t4">📚</div><div class="tname">Baldi's Basics</div><div class="ttag">Adventure · Play now ↗</div></div></div>`); }
+function renderHome(){setPanel(`<h1>Welcome to <em>Mini Games Calm Relax!</em></h1><p>A cozy corner of the internet.</p><div class="divider"></div><span class="lbl">Latest news</span><ul style="list-style:none;text-align:left"><li>✦ Site launched!</li></ul>`)}
+function renderAbout(){setPanel(`<div class="info"><h1>About 🍵</h1><div class="divider"></div><p>Hosted on <strong style="color:var(--amber)">GitHub Pages</strong>.</p></div>`)}
+function renderGames(){setPanel(`<h1>Games 🎮</h1><div class="games-grid"><div class="gtile" onclick="toast('Soon!')"><div class="ticon" style="background:rgba(240,168,74,.12)">🎵</div><div class="tname">Sprunki</div><div class="ttag">Music</div></div><div class="gtile" onclick="toast('Soon!')"><div class="ticon" style="background:rgba(91,191,168,.12)">🐔</div><div class="tname">Platform Chicken</div><div class="ttag">Platformer</div></div><div class="gtile" onclick="toast('Soon!')"><div class="ticon" style="background:rgba(232,130,106,.12)">🔢</div><div class="tname">2048</div><div class="ttag">Puzzle</div></div><div class="gtile" onclick="open('https://freebaldi.github.io','_blank')"><div class="ticon" style="background:rgba(176,148,212,.12)">📚</div><div class="tname">Baldi's Basics</div><div class="ttag">Play Now</div></div></div>`)}
 
-/* ── SEARCH ── */
-const GAMES_DB = [{ name: "Sprunki", tag: "Music", icon: "🎵", color: "rgba(240,168,74,.15)", tagColor: "var(--amber)", players: "124", badge: "", action: `toast('Sprunki coming soon! 🎵')` }, { name: "Platform Chicken", tag: "Platformer", icon: "🐔", color: "rgba(91,191,168,.15)", tagColor: "var(--teal)", players: "87", badge: "", action: `toast('Platform Chicken coming soon! 🐔')` }, { name: "2048", tag: "Puzzle", icon: "🔢", color: "rgba(232,130,106,.15)", tagColor: "var(--rose)", players: "213", badge: "Popular", action: `toast('2048 coming soon! 🔢')` }, { name: "Baldi's Basics", tag: "Adventure", icon: "📚", color: "rgba(176,148,212,.15)", tagColor: "var(--lilac)", players: "56", badge: "Play Now", action: `window.open('https://freebaldi.github.io/','_blank')` }];
-var searchTab = "all";
-function renderSearch() { setPanel(`<h1>Discover 🔍</h1><p>Find games, players, and more.</p><div class="search-bar-wrap"><span class="search-icon">🔍</span><input class="inp" id="searchInput" placeholder="Search games or people…" oninput="doSearch()" autocomplete="off"></div><div class="search-tabs"><button class="stab active" id="tab-all" onclick="setSearchTab('all')">All</button><button class="stab" id="tab-games" onclick="setSearchTab('games')">🎮 Games</button><button class="stab" id="tab-people" onclick="setSearchTab('people')">👤 People</button></div><div id="searchResults" class="search-results"></div>`); renderSearchDefault(); }
-function setSearchTab(tab) { searchTab = tab; ["all", "games", "people"].forEach(t => { document.getElementById("tab-" + t).classList.toggle("active", t === tab); }); doSearch(); }
-function renderSearchDefault() { const res = document.getElementById("searchResults"); if (!res) return; let html = ""; if (searchTab !== "people") { html += `<span class="search-section-lbl">🔥 Popular Games</span>`; html += buildGameCards(GAMES_DB); } if (searchTab !== "games") { html += `<span class="search-section-lbl">✦ Add Friend by UID</span><div style="display:flex;gap:.5rem;align-items:center"><input class="inp" id="fuid" placeholder="Paste a friend's UID…" style="margin:0"><button class="pbtn warm" style="margin:0;white-space:nowrap" onclick="addFriend()">Add</button></div>`; } res.innerHTML = html; }
-function buildGameCards(list) { if (!list.length) return ""; let html = `<div class="game-cards">`; list.forEach(g => { html += `<div class="game-card" onclick="${g.action}"><div class="game-card-thumb" style="background:${g.color}">${g.icon}</div><div class="game-card-body"><div class="game-card-name">${g.name}</div><div class="game-card-meta"><span class="game-card-tag" style="background:${g.color};color:${g.tagColor}">${g.tag}</span><span class="game-card-players">👥 ${g.players}</span>${g.badge ? `<span class="game-card-badge">${g.badge}</span>` : ""}</div></div></div>`; }); html += `</div>`; return html; }
-function buildPeopleResults(users) { if (!users.length) return ""; let html = ""; users.forEach(d => { const uid = d.uid; const avHTML = d.avatar ? `<img src="${d.avatar}" alt="">` : `<span>${(d.username || "?")[0].toUpperCase()}</span>`; const isFriend = me && me.friends && me.friends[uid]; const isBlocked = me && me.blocked && me.blocked[uid]; const iSentRequest = me && me.sentRequests && me.sentRequests[uid]; const friendChip = isFriend ? `<span class="result-friend-chip">Friend</span>` : ""; let actionsHtml = ""; if (me) { if (uid !== me.uid) { if (isBlocked) { actionsHtml = `<button class="pbtn danger sm" onclick="event.stopPropagation(); unblockUser('${uid}')">Unblock</button>`; } else if (isFriend) { actionsHtml = `<button class="pbtn out sm" onclick="event.stopPropagation(); navigate('chat','${uid}')">Message</button>`; } else if (iSentRequest) { actionsHtml = `<button class="pbtn out sm" style="opacity:.65;cursor:default">⏳ Pending</button>`; } else { actionsHtml = `<button class="pbtn out sm" onclick="event.stopPropagation(); sendFriendRequest('${uid}')">Add</button>`; } } } else { actionsHtml = `<button class="pbtn out sm" onclick="openLogin()">Log in</button>`; } html += `<div class="result-item" onclick="navigate('profile','${uid}')"><div class="fav">${avHTML}</div><div style="flex-grow:1"><div style="font-weight:700;display:flex;align-items:center;gap:.3rem">${escapeHtml(d.username || "Unknown")}${friendChip}</div><div style="font-size:.64rem;color:var(--muted);margin-top:.08rem">${uid}</div></div>${actionsHtml}</div>`; }); return html; }
-async function doSearch() { const raw = (document.getElementById("searchInput")?.value || "").trim(); const query = raw.toLowerCase(); const res = document.getElementById("searchResults"); if (!res) return; if (!query) { renderSearchDefault(); return; } let html = ""; if (searchTab !== "people") { const foundGames = GAMES_DB.filter(g => g.name.toLowerCase().includes(query) || g.tag.toLowerCase().includes(query)); if (foundGames.length) { html += `<span class="search-section-lbl">🎮 Games</span>`; html += buildGameCards(foundGames); } else if (searchTab === "games") { html += `<div class="no-results">😔 No games matched "<strong>${escapeHtml(raw)}</strong>"</div>`; } } if (searchTab !== "games") { res.innerHTML = html + `<span class="search-section-lbl">👤 People</span><div id="peopleSlot"><span style="font-size:.8rem;color:var(--muted)">Searching…</span></div>`; try { let foundUsers = []; const uidSnap = await db.ref("users/" + raw).once("value"); if (uidSnap.exists()) foundUsers.push({ uid: raw, ...uidSnap.val() }); const queries = [raw, raw[0].toUpperCase() + raw.slice(1)]; for (const q of queries) { const nameSnap = await db.ref("users").orderByChild("username").startAt(q).endAt(q + "\uf8ff").limitToFirst(6).once("value"); nameSnap.forEach(u => { if (!foundUsers.find(f => f.uid === u.key)) foundUsers.push({ uid: u.key, ...u.val() }); }); } const slot = document.getElementById("peopleSlot"); if (!slot) return; if (foundUsers.length) { slot.innerHTML = buildPeopleResults(foundUsers); } else { slot.innerHTML = `<div class="no-results">😔 No players matched "<strong>${escapeHtml(raw)}</strong>"</div>`; } } catch (e) { console.error(e); const slot = document.getElementById("peopleSlot"); if (slot) slot.innerHTML = `<div class="no-results" style="color:var(--rose)">⚠️ Search error</div>`; } return; } res.innerHTML = html; }
+/* Search Logic */
+const GAMES=[{n:"Sprunki",t:"Music",i:"🎵",c:"rgba(240,168,74,.15)",tc:"var(--amber)",p:"124",b:"",a:`toast('Soon')`},{n:"Baldi",t:"Adventure",i:"📚",c:"rgba(176,148,212,.15)",tc:"var(--lilac)",p:"56",b:"Play",a:`open('https://freebaldi.github.io','_blank')`}];
+var stab="all";
+function renderSearch(){setPanel(`<h1>Discover 🔍</h1><div class="search-bar-wrap"><span class="search-icon">🔍</span><input class="inp" id="sq" placeholder="Search..." oninput="doSearch()"></div><div class="search-tabs"><button class="stab active" id="ta" onclick="setTab('all')">All</button><button class="stab" id="tg" onclick="setTab('games')">Games</button><button class="stab" id="tp" onclick="setTab('people')">People</button></div><div id="sr" class="info"></div>`);renderDef()}
+function setTab(t){stab=t;['a','g','p'].forEach(x=>document.getElementById('t'+x).classList.toggle('active',t===['all','games','people'][['a','g','p'].indexOf(x)]));doSearch()}
+function renderDef(){const r=document.getElementById('sr');if(!r)return;let h="";if(stab!=="people"){h+=`<span class="search-section-lbl">🔥 Popular</span>`;h+=buildGames(GAMES)}if(stab!=="games"){h+=`<span class="search-section-lbl">✦ Add Friend</span><div style="display:flex;gap:.5rem"><input class="inp" id="fuid" placeholder="Paste UID" style="margin:0"><button class="pbtn warm" style="margin:0" onclick="addFriend()">Add</button></div>`}r.innerHTML=h}
+function buildGames(l){if(!l.length)return"";let h=`<div class="game-cards">`;l.forEach(g=>{h+=`<div class="game-card" onclick="${g.a}"><div class="game-card-thumb" style="background:${g.c}">${g.i}</div><div class="game-card-body"><div class="game-card-name">${g.n}</div><div class="game-card-meta"><span class="game-card-tag" style="background:${g.c};color:${g.tc}">${g.t}</span><span style="font-size:.65rem;color:var(--muted)">👥 ${g.p}</span>${g.b?`<span class="game-card-badge">${g.b}</span>`:""}</div></div></div>`});return h+'</div>'}
+function buildPeople(u){if(!u.length)return"";let h="";u.forEach(d=>{const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.username||"?")[0]}</span>`;const f=me&&me.friends&&me.friends[d.uid];const bl=me&&me.blocked&&me.blocked[d.uid];const sr=me&&me.sentRequests&&me.sentRequests[d.uid];const fc=f?`<span style="font-size:.6rem;color:var(--teal);background:rgba(91,191,168,.1);padding:.12rem .4rem;border-radius:100px;margin-left:.3rem">Friend</span>`:"";let act="";if(me){if(d.uid!==me.uid){if(bl){act=`<button class="pbtn sm danger" onclick="event.stopPropagation();unblock('${d.uid}')">Unblock</button>`}else if(f){act=`<button class="pbtn sm out" onclick="event.stopPropagation();navigate('chat','${d.uid}')">Msg</button>`}else if(sr){act=`<button class="pbtn sm out" style="opacity:.6">Pending</button>`}else{act=`<button class="pbtn sm out" onclick="event.stopPropagation();sendReq('${d.uid}')">Add</button>`}}}else{act=`<button class="pbtn sm out" onclick="openLogin()">Log in</button>`}h+=`<div class="result-item" onclick="navigate('profile','${d.uid}')"><div class="fav">${a}</div><div style="flex-grow:1"><div style="font-weight:700">${d.username||"?"}${fc}</div><div style="font-size:.64rem;color:var(--muted)">${d.uid}</div></div>${act}</div>`});return h}
+async function doSearch(){const q=(document.getElementById('sq')?.value||"").trim().toLowerCase();const r=document.getElementById('sr');if(!r)return;if(!q){renderDef();return}let h="";if(stab!=="people"){const f=GAMES.filter(g=>g.n.toLowerCase().includes(q));if(f.length){h+=`<span class="search-section-lbl">🎮 Games</span>`;h+=buildGames(f)}}if(stab!=="games"){r.innerHTML=h+`<span class="search-section-lbl">👤 People</span><div id="ps"></div>`;try{let f=[];const us=await db.ref("users/"+q).once("value");if(us.exists())f.push({uid:q,...us.val()});const qs=[q,q[0].toUpperCase()+q.slice(1)];for(const k of qs){const ns=await db.ref("users").orderByChild("username").startAt(k).endAt(k+"\uf8ff").limitToFirst(6).once("value");ns.forEach(u=>{if(!f.find(x=>x.uid===u.key))f.push({uid:u.key,...u.val()})})}document.getElementById('ps').innerHTML=f.length?buildPeople(f):`<div class="no-results">No results</div>`}catch(e){console.error(e)}}else r.innerHTML=h}
 
-/* ── FRIEND REQUESTS ── */
-async function addFriend() { const fid = document.getElementById("fuid")?.value.trim(); if (!fid) { toast("⚠️ Paste a UID first."); return; } if (!me) { toast("⚠️ Log in first."); return; } if (fid === me.uid) { toast("⚠️ That's you!"); return; } await sendFriendRequest(fid); }
-async function addFriendById(fid) { if (!me) return; await sendFriendRequest(fid); }
-async function sendFriendRequest(fid) { if (!me) return; if (me.friends && me.friends[fid]) { toast("👥 Already friends!"); return; } if (me.sentRequests && me.sentRequests[fid]) { toast("⏳ Request already sent."); return; } try { const theirReq = await db.ref("friendRequests/" + me.uid + "/" + fid).once("value"); if (theirReq.exists()) { await acceptFriendRequest(fid, true); return; } const snap = await db.ref("users/" + fid).get(); if (!snap.exists()) { toast("⚠️ User not found."); return; } const targetUser = snap.val(); await db.ref("friendRequests/" + fid + "/" + me.uid).set({ from: me.uid, username: me.username, avatar: me.avatar || "", ts: Date.now() }); await db.ref("users/" + me.uid + "/sentRequests/" + fid).set(true); if (!me.sentRequests) me.sentRequests = {}; me.sentRequests[fid] = true; toast("📨 Friend request sent to " + (targetUser.username || fid) + "!"); if (currentPath === 'profile') renderUserProfile(fid); else if (currentPath === 'search') doSearch(); } catch (e) { toast("⚠️ " + e.message); } }
-async function acceptFriendRequest(fromUid, silent) { if (!me) return; try { await db.ref("users/" + me.uid + "/friends/" + fromUid).set(true); await db.ref("users/" + fromUid + "/friends/" + me.uid).set(true); await db.ref("friendRequests/" + me.uid + "/" + fromUid).remove(); await db.ref("users/" + fromUid + "/sentRequests/" + me.uid).remove(); if (!me.friends) me.friends = {}; me.friends[fromUid] = true; if (!silent) toast("✅ You're now friends!"); else toast("✅ You're now friends! (mutual request)"); renderProfile(); } catch (e) { toast("⚠️ " + e.message); } }
-async function declineFriendRequest(fromUid) { if (!me) return; try { await db.ref("friendRequests/" + me.uid + "/" + fromUid).remove(); await db.ref("users/" + fromUid + "/sentRequests/" + me.uid).remove(); toast("Request declined."); renderProfile(); } catch (e) { toast("⚠️ " + e.message); } }
-async function cancelFriendRequest(toUid) { if (!me) return; try { await db.ref("friendRequests/" + toUid + "/" + me.uid).remove(); await db.ref("users/" + me.uid + "/sentRequests/" + toUid).remove(); if (me.sentRequests) delete me.sentRequests[toUid]; toast("Request cancelled."); if (currentPath === 'profile') renderUserProfile(toUid); else if (currentPath === 'search') doSearch(); } catch (e) { toast("⚠️ " + e.message); } }
-async function removeFriend(fid) { if (!me) return; if (!confirm("Remove this friend?")) return; try { await db.ref("users/" + me.uid + "/friends/" + fid).remove(); await db.ref("users/" + fid + "/friends/" + me.uid).remove(); if (me.friends) delete me.friends[fid]; toast("Friend removed."); if (currentPath === 'profile') renderUserProfile(fid); } catch (e) { toast("⚠️ " + e.message); } }
-async function blockUser(uid) { if (!me) return; try { await db.ref("users/" + me.uid + "/blocked/" + uid).set(true); if (!me.blocked) me.blocked = {}; me.blocked[uid] = true; toast("🚫 User blocked."); renderUserProfile(uid); } catch (e) { toast("⚠️ " + e.message); } }
-async function unblockUser(uid) { if (!me) return; try { await db.ref("users/" + me.uid + "/blocked/" + uid).remove(); if (me.blocked) delete me.blocked[uid]; toast("User unblocked."); if (currentPath === 'profile') renderUserProfile(uid); else if (currentPath === 'search') doSearch(); } catch (e) { toast("⚠️ " + e.message); } }
+/* Friend Logic */
+async function addFriend(){const id=document.getElementById('fuid')?.value.trim();if(!id){toast("Paste UID");return}if(!me){toast("Log in");return}if(id===me.uid){toast("That's you");return}await sendReq(id)}
+async function sendReq(id){if(!me)return;if(me.friends&&me.friends[id]){toast("Already friends");return}if(me.sentRequests&&me.sentRequests[id]){toast("Already sent");return}try{const tr=await db.ref("friendRequests/"+me.uid+"/"+id).once("value");if(tr.exists()){await acceptReq(id,true);return}const s=await db.ref("users/"+id).get();if(!s.exists()){toast("User not found");return}await db.ref("friendRequests/"+id+"/"+me.uid).set({from:me.uid,username:me.username,avatar:me.avatar||"",ts:Date.now()});await db.ref("users/"+me.uid+"/sentRequests/"+id).set(true);if(!me.sentRequests)me.sentRequests={};me.sentRequests[id]=true;toast("📨 Request sent!")}catch(e){toast("⚠️ "+e.message)}}
+async function acceptReq(id,s){if(!me)return;try{await db.ref("users/"+me.uid+"/friends/"+id).set(true);await db.ref("users/"+id+"/friends/"+me.uid).set(true);await db.ref("friendRequests/"+me.uid+"/"+id).remove();await db.ref("users/"+id+"/sentRequests/"+me.uid).remove();if(!me.friends)me.friends={};me.friends[id]=true;toast(s?"✅ Mutual friends!":"✅ Friends!");renderProfile()}catch(e){toast("⚠️ "+e.message)}}
+async function block(id){if(!me)return;try{await db.ref("users/"+me.uid+"/blocked/"+id).set(true);if(!me.blocked)me.blocked={};me.blocked[id]=true;toast("Blocked");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function unblock(id){if(!me)return;try{await db.ref("users/"+me.uid+"/blocked/"+id).remove();if(me.blocked)delete me.blocked[id];toast("Unblocked");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
 
-/* ── PROFILE ── */
-async function renderProfile() { if (!me) return; const avHTML = me.avatar ? `<img src="${me.avatar}" alt="av">` : me.username[0].toUpperCase(); const isAdmin = ADMINS.includes(me.uid); const adminBadge = isAdmin ? `<span class="admin-badge" style="margin-top:.2rem">⭐ Admin</span>` : ''; const friendsCount = me.friends ? Object.keys(me.friends).filter(k => me.friends[k]).length : 0; let requestsHtml = ""; try { const reqSnap = await db.ref("friendRequests/" + me.uid).once("value"); if (reqSnap.exists()) { const reqs = []; reqSnap.forEach(r => reqs.push({ uid: r.key, ...r.val() })); if (reqs.length) { requestsHtml = `<div class="divider" style="width:100%"></div><span class="lbl" style="align-self:flex-start">📨 Friend Requests (${reqs.length})</span><div style="width:100%;display:flex;flex-direction:column;gap:.4rem">`; reqs.forEach(r => { const avH = r.avatar ? `<img src="${r.avatar}" alt="">` : `<span>${(r.username || "?")[0].toUpperCase()}</span>`; requestsHtml += `<div style="display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:12px"><div class="fav" style="cursor:pointer" onclick="navigate('profile','${r.uid}')">${avH}</div><div style="flex-grow:1;font-size:.83rem;font-weight:700">${escapeHtml(r.username || "Unknown")}</div><button class="pbtn warm" style="margin:0;padding:.3rem .75rem;font-size:.72rem" onclick="acceptFriendRequest('${r.uid}', false)">Accept</button><button class="pbtn out" style="margin:0;padding:.3rem .75rem;font-size:.72rem" onclick="declineFriendRequest('${r.uid}')">Decline</button></div>`; }); requestsHtml += `</div>`; } } } catch (e) { console.error(e); } setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${avHTML}</div></div><h2>${escapeHtml(me.username)}</h2>${adminBadge}<p style="color:var(--muted);font-size:.85rem">🪙 ${me.coins || 0} coins · 👥 ${friendsCount} friends</p><label class="upload-lbl">📷 Change avatar<input type="file" accept="image/*" onchange="uploadAvatar(event)"></label><p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">Your UID: <strong style="color:var(--amber);user-select:all">${me.uid}</strong></p>${requestsHtml}<div class="divider" style="width:100%"></div><button class="pbtn out" onclick="doLogout()">Log out</button><button class="pbtn danger" style="margin-left:.4rem" onclick="deleteAccount()">Delete Account</button></div>`); }
-async function renderUserProfile(uid) { try { const snap = await db.ref("users/" + uid).get(); if (!snap.exists()) { toast("User not found."); navigate('home'); return; } const user = snap.val(); const avHTML = user.avatar ? `<img src="${user.avatar}" alt="av">` : (user.username || "U")[0].toUpperCase(); const isAdmin = ADMINS.includes(uid); let actionsHtml = ""; let adminActions = ""; if (me) { const isFriend = me.friends && me.friends[uid]; const isBlocked = me.blocked && me.blocked[uid]; const iSentRequest = me.sentRequests && me.sentRequests[uid]; const iAmAdmin = ADMINS.includes(me.uid); let theyRequestedMe = false; try { const req = await db.ref("friendRequests/" + me.uid + "/" + uid).once("value"); theyRequestedMe = req.exists(); } catch (_) { } if (uid !== me.uid) { if (isBlocked) { actionsHtml = `<button class="pbtn danger" onclick="unblockUser('${uid}')">Unblock User</button>`; } else if (isFriend) { actionsHtml = `<button class="pbtn out" onclick="navigate('chat','${uid}')">Send Message</button><button class="pbtn danger" style="margin-left:.5rem" onclick="removeFriend('${uid}')">Remove Friend</button><button class="pbtn danger" style="margin-left:.5rem" onclick="blockUser('${uid}')">Block</button>`; } else if (theyRequestedMe) { actionsHtml = `<button class="pbtn warm" onclick="acceptFriendRequest('${uid}', false)">Accept Request</button><button class="pbtn out" style="margin-left:.5rem" onclick="declineFriendRequest('${uid}')">Decline</button>`; } else if (iSentRequest) { actionsHtml = `<button class="pbtn out" style="opacity:.7;cursor:default">⏳ Request Sent</button><button class="pbtn danger" style="margin-left:.5rem" onclick="cancelFriendRequest('${uid}')">Cancel</button>`; } else { actionsHtml = `<button class="pbtn warm" onclick="sendFriendRequest('${uid}')">Add Friend</button><button class="pbtn danger" style="margin-left:.5rem" onclick="blockUser('${uid}')">Block</button>`; } } if (iAmAdmin && uid !== me.uid) { adminActions = `<div class="admin-actions"><button class="ban-btn" onclick="banUser('${uid}')">🚫 Ban User</button><button class="ban-btn" style="background:rgba(200,50,50,.1);color:#c44;border-color:rgba(200,50,50,.3)" onclick="deleteUserData('${uid}')">🗑️ Delete Data</button></div>`; } } else { actionsHtml = `<button class="pbtn warm" onclick="openLogin()">Log in to interact</button>`; } setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${avHTML}</div></div><h2>${escapeHtml(user.username || "Unknown")}</h2>${isAdmin ? `<span class="admin-badge" style="margin-top:.2rem">⭐ Admin</span>` : ''}<p style="color:var(--muted);font-size:.85rem">🪙 ${user.coins || 0} coins</p><div class="prof-actions">${actionsHtml}</div>${adminActions}</div>`); } catch (e) { toast("Error loading profile."); } }
-async function banUser(uid) { if (!ADMINS.includes(me.uid)) return; if (!confirm("Are you sure you want to BAN this user?")) return; try { await db.ref("banned/" + uid).set(true); toast("User banned."); navigate('home'); } catch (e) { toast("⚠️ " + e.message); } }
-async function deleteUserData(uid) { if (!ADMINS.includes(me.uid)) return; if (!confirm("DELETE this user's data? This cannot be undone.")) return; try { await db.ref("users/" + uid).remove(); await db.ref("banned/" + uid).remove(); toast("User data deleted."); navigate('home'); } catch (e) { toast("⚠️ Error: " + e.message); } }
+/* Profile Logic */
+async function renderProfile(){if(!me)return;const a=me.avatar?`<img src="${me.avatar}">`:me.username[0].toUpperCase();const ia=ADMINS.includes(me.uid);const fc=me.friends?Object.keys(me.friends).length:0;let rh="";try{const rs=await db.ref("friendRequests/"+me.uid).once("value");if(rs.exists()){const rq=[];rs.forEach(r=>rq.push({uid:r.key,...r.val()}));if(rq.length){rh=`<div class="divider"></div><span class="lbl">📨 Requests (${rq.length})</span><div style="display:flex;flex-direction:column;gap:.4rem">`;rq.forEach(r=>{const av=r.avatar?`<img src="${r.avatar}">`:`<span>${(r.username||"?")[0]}</span>`;rh+=`<div style="display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;background:rgba(255,210,140,.04);border:1px solid var(--border2);border-radius:12px"><div class="fav" onclick="navigate('profile','${r.uid}')">${av}</div><div style="flex-grow:1;font-weight:700">${r.username||"?"}</div><button class="pbtn sm warm" onclick="acceptReq('${r.uid}',false)">Accept</button><button class="pbtn sm out" onclick="decline('${r.uid}')">Decline</button></div>`});rh+='</div>'}}}catch(_){}setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${a}</div></div><h2>${me.username}</h2>${ia?`<span class="admin-badge">⭐ Admin</span>`:''}<p style="color:var(--muted)">🪙 ${me.coins||0} coins · 👥 ${fc} friends</p><label class="upload-lbl">📷 Avatar<input type="file" accept="image/*" onchange="upAv(event)"></label><p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">UID: <strong style="color:var(--amber);user-select:all">${me.uid}</strong></p>${rh}<div class="divider"></div><button class="pbtn out" onclick="auth.signOut().then(()=>{me=null;onLogOut();toast('Bye!');navigate('home')})">Log out</button><button class="pbtn danger" style="margin-left:.4rem" onclick="delAcc()">Delete Account</button></div>`)}
+async function renderUserProfile(id){try{const s=await db.ref("users/"+id).get();if(!s.exists()){toast("Not found");navigate('home');return}const u=s.val();const a=u.avatar?`<img src="${u.avatar}">`:(u.username||"U")[0];const ia=ADMINS.includes(id);let act="";let aa="";if(me){const f=me.friends&&me.friends[id];const bl=me.blocked&&me.blocked[id];const sr=me.sentRequests&&me.sentRequests[id];const iam=ADMINS.includes(me.uid);let tr=false;try{const r=await db.ref("friendRequests/"+me.uid+"/"+id).once("value");tr=r.exists()}catch(_){}if(id!==me.uid){if(bl){act=`<button class="pbtn danger" onclick="unblock('${id}')">Unblock</button>`}else if(f){act=`<button class="pbtn out" onclick="navigate('chat','${id}')">Message</button><button class="pbtn danger" style="margin-left:.5rem" onclick="remFriend('${id}')">Remove</button><button class="pbtn danger" style="margin-left:.5rem" onclick="block('${id}')">Block</button>`}else if(tr){act=`<button class="pbtn warm" onclick="acceptReq('${id}',false)">Accept</button><button class="pbtn out" style="margin-left:.5rem" onclick="decline('${id}')">Decline</button>`}else if(sr){act=`<button class="pbtn out" style="opacity:.7">Pending</button><button class="pbtn danger" style="margin-left:.5rem" onclick="cancelReq('${id}')">Cancel</button>`}else{act=`<button class="pbtn warm" onclick="sendReq('${id}')">Add Friend</button><button class="pbtn danger" style="margin-left:.5rem" onclick="block('${id}')">Block</button>`}}if(iam&&id!==me.uid){aa=`<div class="admin-actions"><button class="ban-btn" onclick="ban('${id}')">🚫 Ban</button><button class="ban-btn" style="background:rgba(200,50,50,.1);color:#c44" onclick="delData('${id}')">🗑️ Delete Data</button></div>`}}else{act=`<button class="pbtn warm" onclick="openLogin()">Log in</button>`}setPanel(`<div class="prof-wrap"><div class="av-ring"><div class="av-inner">${a}</div></div><h2>${u.username||"?"}</h2>${ia?`<span class="admin-badge">⭐ Admin</span>`:''}<p style="color:var(--muted)">🪙 ${u.coins||0} coins</p><div style="margin-top:.8rem">${act}</div>${aa}</div>`)}catch(_){toast("Error")}}
+async function decline(id){if(!me)return;try{await db.ref("friendRequests/"+me.uid+"/"+id).remove();await db.ref("users/"+id+"/sentRequests/"+me.uid).remove();toast("Declined");renderProfile()}catch(e){toast("⚠️ "+e.message)}}
+async function cancelReq(id){if(!me)return;try{await db.ref("friendRequests/"+id+"/"+me.uid).remove();await db.ref("users/"+me.uid+"/sentRequests/"+id).remove();if(me.sentRequests)delete me.sentRequests[id];toast("Cancelled");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function remFriend(id){if(!me||!confirm("Remove friend?"))return;try{await db.ref("users/"+me.uid+"/friends/"+id).remove();await db.ref("users/"+id+"/friends/"+me.uid).remove();if(me.friends)delete me.friends[id];toast("Removed");renderUserProfile(id)}catch(e){toast("⚠️ "+e.message)}}
+async function ban(id){if(!ADMINS.includes(me.uid))return;if(!confirm("Ban user?"))return;try{await db.ref("banned/"+id).set(true);toast("Banned");navigate('home')}catch(e){toast("⚠️ "+e.message)}}
+async function delData(id){if(!ADMINS.includes(me.uid))return;if(!confirm("Delete data?"))return;try{await db.ref("users/"+id).remove();await db.ref("banned/"+id).remove();toast("Deleted");navigate('home')}catch(e){toast("⚠️ Error: "+e.message)}}
+async function upAv(e){const f=e.target.files[0];if(!f||!me)return;toast("Uploading...");try{const ri=await new Promise((res,rej)=>{const r=new FileReader();r.onload=ev=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');const mx=128;let w=i.width,h=i.height;if(w>h){if(w>mx){h*=mx/w;w=mx}}else{if(h>mx){w*=mx/h;h=mx}c.width=w;c.height=h;c.getContext('2d').drawImage(i,0,0,w,h);res(c.toDataURL('image/jpeg',.7))};i.src=ev.target.result};r.onerror=rej;r.readAsDataURL(f)});await db.ref("users/"+me.uid+"/avatar").set(ri);me.avatar=ri;document.getElementById('pav').innerHTML=`<img src="${ri}">`;toast("✅ Updated!");renderProfile()}catch(_){toast("⚠️ Failed")}}
+async function delAcc(){if(!confirm("Delete account?"))return;try{await db.ref("users/"+me.uid).remove();await auth.currentUser.delete();toast("Deleted");navigate('home')}catch(e){toast("⚠️ "+e.message)}}
 
-/* ── AVATAR ── */
-async function uploadAvatar(e) { const file = e.target.files[0]; if (!file || !me) return; toast("⏳ Processing..."); try { const resizedImage = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = function (event) { const img = new Image(); img.onload = function () { const canvas = document.createElement('canvas'); const MAX_SIZE = 128; let width = img.width; let height = img.height; if (width > height) { if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; } } else { if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; } } canvas.width = width; canvas.height = height; canvas.getContext('2d').drawImage(img, 0, 0, width, height); resolve(canvas.toDataURL('image/jpeg', 0.7)); }; img.onerror = reject; img.src = event.target.result; }; reader.onerror = reject; reader.readAsDataURL(file); }); await db.ref("users/" + me.uid + "/avatar").set(resizedImage); me.avatar = resizedImage; const pav = document.getElementById("pav"); pav.innerHTML = `<img src="${resizedImage}" alt="">`; toast("✅ Avatar updated!"); renderProfile(); } catch (err) { toast("⚠️ Upload failed."); } }
-async function deleteAccount() { if (!confirm("Delete your account? Cannot be undone.")) return; try { const uid = me.uid; await db.ref("users/" + uid).remove(); await auth.currentUser.delete(); toast("Account deleted."); navigate('home'); } catch (e) { toast("⚠️ " + e.message); } }
+/* Chat Logic */
+async function renderChat(){if(!me)return;const fids=Object.keys(me.friends||{}).filter(k=>me.friends[k]);let btns="";for(const id of fids){const ac=activeDM===id?"active":"";let lb=id.slice(0,6)+"…";try{const s=await db.ref("users/"+id+"/username").once("value");if(s.exists())lb=s.val()}catch(_){}btns+=`<button class="chat-room-btn ${ac}" onclick="navigate('chat','${id}')">@ ${lb}</button>`}const ga=activeDM===null?"active":"";setPanel(`<h1 style="margin-bottom:.8rem">Chat 💬</h1><div class="chat-layout"><div class="chat-sidebar"><div class="chat-room-section">Channels</div><button class="chat-room-btn ${ga}" onclick="navigate('chat')">🌐 Global</button>${fids.length?`<div class="chat-room-section">Friends</div>${btns}`:""}</div><div class="chat-main"><div class="chat-box" id="cb">Loading…</div><div style="display:flex;gap:.5rem"><input class="inp" id="cm" placeholder="Say hi..." onkeydown="if(event.key==='Enter')send()" style="margin:0"><button class="pbtn warm" style="margin:0" onclick="send()">Send</button></div></div></div>`);sub()}
+function sub(){if(chatRef){chatRef.off("value",chatCb);chatRef=null}if(!me)return;const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";chatRef=db.ref(p).limitToLast(50);chatCb=chatRef.on("value",s=>{const b=document.getElementById('cb');if(!b)return;if(!s||!s.exists()){b.innerHTML=`<p style="color:var(--muted);font-size:.82rem">No messages yet</p>`;return}let h="";s.forEach(m=>{const d=m.val(),k=m.key;if(me.blocked&&me.blocked[d.uid])return;const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.user||"?")[0]}</span>`;const ia=ADMINS.includes(d.uid);const iam=ADMINS.includes(me.uid);const db=iam?`<button class="del-msg-btn" onclick="delMsg('${p}','${k}')">🗑️</button>`:"";h+=`<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${a}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${d.user||"?"} ${ia?`<span class="admin-badge">⭐</span>`:""}</div><div class="chat-text">${d.text.replace(/</g,"&lt;")}</div></div>${db}</div>`});b.innerHTML=h;b.scrollTop=b.scrollHeight})}
+async function delMsg(p,k){if(!ADMINS.includes(me.uid))return;try{await db.ref(p+"/"+k).remove();toast("Deleted")}catch(_){toast("⚠️ Failed")}}
+async function send(){const i=document.getElementById('cm'),t=(i.value||"").trim();if(!t||!me)return;i.value="";const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";try{await db.ref(p).push({user:me.username,uid:me.uid,text:t,avatar:me.avatar||"",ts:Date.now()})}catch(e){toast("⚠️ "+e.message)}}
 
-/* ── CHAT ── */
-async function renderChat() { if (!me) return; const friendsObj = me.friends || {}; const friendIds = Object.keys(friendsObj).filter(k => friendsObj[k] === true); let dmButtons = ""; for (const fid of friendIds) { const isActive = activeDM === fid ? "active" : ""; let label = fid.slice(0, 8) + "…"; try { const snap = await db.ref("users/" + fid + "/username").once("value"); if (snap.exists()) label = snap.val(); } catch (_) { } dmButtons += `<button class="chat-room-btn ${isActive}" onclick="navigate('chat','${fid}')">@ ${escapeHtml(label)}</button>`; } const globalActive = activeDM === null ? "active" : ""; setPanel(`<h1 style="margin-bottom:.8rem">Chat 💬</h1><div class="chat-layout"><div class="chat-sidebar"><div class="chat-room-section">Channels</div><button class="chat-room-btn ${globalActive}" onclick="navigate('chat')">🌐 Global</button>${friendIds.length ? `<div class="chat-room-section">Friends (${friendIds.length})</div>${dmButtons}` : ""}</div><div class="chat-main"><div class="chat-box" id="chatBox"><p style="font-size:.82rem;color:var(--muted)">Loading…</p></div><div class="chat-input-row"><input class="inp" id="chatMsg" placeholder="Say something nice…" onkeydown="if(event.key==='Enter')sendMsg()" style="margin:0"><button class="pbtn warm" style="margin:0;white-space:nowrap" onclick="sendMsg()">Send</button></div></div></div>`); subscribeRoom(); }
-function subscribeRoom() { unsubscribeChat(); if (!me) return; const roomPath = activeDM ? "dm/" + [me.uid, activeDM].sort().join("_") : "chat/global"; chatRef = db.ref(roomPath).limitToLast(40); chatCb = chatRef.on("value", snap => { const box = document.getElementById("chatBox"); if (!box) return; if (!snap || !snap.exists()) { box.innerHTML = `<p style="font-size:.82rem;color:var(--muted)">No messages yet — say hi! 👋</p>`; return; } let html = ""; snap.forEach(m => { const d = m.val(); const key = m.key; if (me.blocked && me.blocked[d.uid]) return; const avHTML = d.avatar ? `<img src="${d.avatar}" alt="">` : `<span>${(d.user || "?")[0].toUpperCase()}</span>`; const isAdmin = ADMINS.includes(d.uid); const adminBadge = isAdmin ? `<span class="admin-badge">⭐</span>` : ''; const iAmAdmin = ADMINS.includes(me.uid); const delBtn = iAmAdmin ? `<button class="del-msg-btn" onclick="deleteMsg('${roomPath}','${key}')">🗑️</button>` : ''; const safeText = escapeHtml(d.text || "").replace(/\n/g, "<br>"); html += `<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${avHTML}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${escapeHtml(d.user || "anon")} ${adminBadge}</div><div class="chat-text">${safeText}</div></div>${delBtn}</div>`; }); box.innerHTML = html; box.scrollTop = box.scrollHeight; }); }
-async function deleteMsg(path, key) { if (!ADMINS.includes(me.uid)) return; try { await db.ref(path + "/" + key).remove(); toast("Message deleted."); } catch (e) { toast("⚠️ Failed to delete."); } }
-async function sendMsg() { const input = document.getElementById("chatMsg"); const text = (input.value || "").trim(); if (!text || !me) return; input.value = ""; const roomPath = activeDM ? "dm/" + [me.uid, activeDM].sort().join("_") : "chat/global"; try { await db.ref(roomPath).push({ user: me.username, uid: me.uid, text, avatar: me.avatar || "", ts: Date.now() }); } catch (e) { toast("⚠️ " + e.message); } }
+/* Helpers */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 
-/* ── HELPERS ── */
-function escapeHtml(str) { return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
-
-/* ── PARTICLES ── */
-(function () { const c = document.getElementById("particles"); const cols = ["rgba(240,168,74,", "rgba(232,130,106,", "rgba(91,191,168,", "rgba(176,148,212,"]; for (let i = 0; i < 22; i++) { const p = document.createElement("div"); p.className = "particle"; const sz = 3 + Math.random() * 5; p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}vw;bottom:-20px;background:${cols[i % 4]}.55);animation-duration:${12 + Math.random() * 16}s;animation-delay:${Math.random() * 18}s`; c.appendChild(p); } })();
+/* Particles */
+(function(){const c=document.getElementById('particles'),cols=["rgba(240,168,74,", "rgba(232,130,106,", "rgba(91,191,168,", "rgba(176,148,212,"];for(let i=0;i<18;i++){const p=document.createElement('div');p.className='particle';const sz=3+Math.random()*5;p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;bottom:-20px;background:${cols[i%4]}.55);animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*18}s`;c.appendChild(p)}})();
 </script>
 </body>
 </html>
