@@ -209,6 +209,28 @@ const ADMINS = []; // Put your UID here
 
 var me=null, chatRef=null, chatCb=null, isLight=false, activeDM=null, currentPath="home", isBanned=false, unverifiedMode=false;
 
+/* ── 1. HANDLE EMAIL VERIFICATION LINK (MUST RUN FIRST) ── */
+async function handleEmailVerification() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mode = urlParams.get('mode');
+  const oobCode = urlParams.get('oobCode');
+  
+  if (mode === 'verifyEmail' && oobCode) {
+    try {
+      await auth.applyActionCode(oobCode);
+      toast("✅ Email verified successfully! Welcome aboard.");
+      // Clean the URL so we don't re-process this code on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+      // Force reload user to get fresh emailVerified status
+      if(auth.currentUser) await auth.currentUser.reload();
+    } catch (e) {
+      console.error(e);
+      toast("⚠️ This link is invalid or expired. Try logging in.");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+}
+
 function initPresence(){
   const ref=db.ref("presence"); let sid=localStorage.getItem('sid')||Math.random().toString(36).substr(2,9); localStorage.setItem('sid',sid);
   db.ref(".info/connected").on("value",s=>{if(s.val()===true){ref.child(sid).set(true);ref.child(sid).onDisconnect().remove()}});
@@ -216,7 +238,7 @@ function initPresence(){
 }
 initPresence();
 
-function toast(m,ms=2600){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+function toast(m,ms=3000){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
 function toggleTheme(){isLight=!isLight;document.body.classList.toggle('light',isLight);document.getElementById('themeBtn').textContent=isLight?"☀️":"🌙"}
 function setPanel(h){if(chatRef){chatRef.off("value",chatCb);chatRef=null}const el=document.getElementById('panel');el.classList.remove("animate");el.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("animate")))}
 function navigate(p,a){let h=p;if(a)h+="/"+a;if(p==='home'){try{history.pushState({},'',location.pathname)}catch(_){}handleRoute()}else location.hash=h}
@@ -227,26 +249,25 @@ window.addEventListener('hashchange',handleRoute);window.addEventListener('popst
 firebase.auth().onAuthStateChanged(async user => {
   if(isBanned)return;
   if(user){
-    // Ban check
+    // 1. Handle the email verification link if present in URL
+    await handleEmailVerification();
+
+    // 2. Ban check
     const b=await db.ref("banned/"+user.uid).once("value");if(b.exists()){isBanned=true;toast("⚠️ Banned");await auth.signOut();return}
     
-    // Email Verification check
+    // 3. Email Verification status
     if(!user.emailVerified){
       unverifiedMode = true;
       document.getElementById('verifyBanner').style.display = 'block';
-      // We still let them in, but with a minimal 'me' object if not in DB
       const snap=await db.ref("users/"+user.uid).get();
-      if(snap.exists()){
-        const d=snap.val();me={uid:user.uid,username:d.username||"User",coins:d.coins||0,avatar:d.avatar||"",friends:d.friends||{},blocked:d.blocked||{},sentRequests:d.sentRequests||{}};
-      } else {
-        me={uid:user.uid,username:user.email.split('@')[0],coins:0,avatar:"",friends:{},blocked:{},sentRequests:{}};
-      }
-      onLoggedIn(); // Log them in UI-wise
+      if(snap.exists()){const d=snap.val();me={uid:user.uid,username:d.username||"User",coins:d.coins||0,avatar:d.avatar||"",friends:d.friends||{},blocked:d.blocked||{},sentRequests:d.sentRequests||{}};}
+      else{me={uid:user.uid,username:user.email.split('@')[0],coins:0,avatar:"",friends:{},blocked:{},sentRequests:{}};}
+      onLoggedIn();
       handleRoute();
       return;
     }
     
-    // Verified User
+    // 4. Verified User
     unverifiedMode = false;
     document.getElementById('verifyBanner').style.display = 'none';
     const snap=await db.ref("users/"+user.uid).get();
@@ -277,15 +298,7 @@ async function checkVerification() {
   if(!auth.currentUser) return;
   toast("Checking...");
   await auth.currentUser.reload();
-  if(auth.currentUser.emailVerified) {
-    toast("✅ Email Verified!");
-    document.getElementById('verifyBanner').style.display = 'none';
-    unverifiedMode = false;
-    // Force refresh state
-    location.reload();
-  } else {
-    toast("⚠️ Not verified yet.");
-  }
+  // The onAuthStateChanged will fire automatically if the state changes
 }
 
 function openModal(h){document.getElementById('mwin').innerHTML=h;document.getElementById('modal').classList.add('open')}
@@ -339,9 +352,6 @@ async function renderChat(){if(!me)return;const fids=Object.keys(me.friends||{})
 function sub(){if(chatRef){chatRef.off("value",chatCb);chatRef=null}if(!me)return;const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";chatRef=db.ref(p).limitToLast(50);chatCb=chatRef.on("value",s=>{const b=document.getElementById('cb');if(!b)return;if(!s||!s.exists()){b.innerHTML=`<p style="color:var(--muted);font-size:.82rem">No messages yet</p>`;return}let h="";s.forEach(m=>{const d=m.val(),k=m.key;if(me.blocked&&me.blocked[d.uid])return;const a=d.avatar?`<img src="${d.avatar}">`:`<span>${(d.user||"?")[0]}</span>`;const ia=ADMINS.includes(d.uid);const iam=ADMINS.includes(me.uid);const db=iam?`<button class="del-msg-btn" onclick="delMsg('${p}','${k}')">🗑️</button>`:"";h+=`<div class="chat-msg"><div class="chat-av" onclick="navigate('profile','${d.uid}')">${a}</div><div class="chat-body"><div class="chat-user" onclick="navigate('profile','${d.uid}')">${d.user||"?"} ${ia?`<span class="admin-badge">⭐</span>`:""}</div><div class="chat-text">${d.text.replace(/</g,"&lt;")}</div></div>${db}</div>`});b.innerHTML=h;b.scrollTop=b.scrollHeight})}
 async function delMsg(p,k){if(!ADMINS.includes(me.uid))return;try{await db.ref(p+"/"+k).remove();toast("Deleted")}catch(_){toast("⚠️ Failed")}}
 async function send(){const i=document.getElementById('cm'),t=(i.value||"").trim();if(!t||!me)return;i.value="";const p=activeDM?"dm/"+[me.uid,activeDM].sort().join("_"):"chat/global";try{await db.ref(p).push({user:me.username,uid:me.uid,text:t,avatar:me.avatar||"",ts:Date.now()})}catch(e){toast("⚠️ "+e.message)}}
-
-/* Helpers */
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 
 /* Particles */
 (function(){const c=document.getElementById('particles'),cols=["rgba(240,168,74,", "rgba(232,130,106,", "rgba(91,191,168,", "rgba(176,148,212,"];for(let i=0;i<18;i++){const p=document.createElement('div');p.className='particle';const sz=3+Math.random()*5;p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;bottom:-20px;background:${cols[i%4]}.55);animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*18}s`;c.appendChild(p)}})();
