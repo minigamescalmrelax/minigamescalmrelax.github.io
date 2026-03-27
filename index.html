@@ -68,9 +68,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 /* Mobile Nav Adjustments */
 @media (max-width: 768px) {
   nav{padding:.6rem 1rem;gap:2px}
-  .nav-logo span{display:none} /* Hide text logo, keep badge */
+  .nav-logo span{display:none} 
   .nbtn{padding:.4rem .6rem;font-size:.7rem}
-  #coinsChip, #onlineChip{display:none} /* Hide chips on mobile to save space */
+  #coinsChip, #onlineChip{display:none} 
 }
 
 /* Panel */
@@ -224,7 +224,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:cen
 
 <div id="checker"></div>
 <div id="glow"></div>
-<div id="glow2"></div> <!-- Added second layer -->
+<div id="glow2"></div>
 <div id="particles"></div>
 <div id="grain"></div>
 
@@ -341,8 +341,9 @@ function setPanel(html) {
   const el = document.getElementById("panel");
   el.classList.remove("animate");
   el.innerHTML = html;
+  // Corrected syntax for requestAnimationFrame
   requestAnimationFrame(() => {
-    requestAnimationFrame(() {
+    requestAnimationFrame(() => {
       el.classList.add("animate");
     });
   });
@@ -527,6 +528,7 @@ function renderAbout() {
   setPanel(`<div class="info"><h1>About 🍵</h1><div class="divider"></div><p>Mini Games Calm Relax is a cozy site for people who want to play something fun without stress or pressure.</p><p>No timers counting you down. No leaderboards. Just you, the game, and a good time.</p><p>Hosted on <strong style="color:var(--amber)">Nekoweb</strong> because the indie web deserves more love. 🌱</p></div>`);
 }
 
+// FIXED: Corrected HTML structure for Support page
 function renderSupport() {
   setPanel(`<div class="info"><h1>Support 💛</h1><div class="divider"></div><p>Having issues or want to say hi? Join our Discord community!</p><button class="pbtn warm" onclick="window.open('https://discord.gg/ekgbMfPeN4','_blank')">Join Discord</button><button class="pbtn out" style="margin-left:.5rem" onclick="toast('Donations coming soon! 💛')">Donate ♥</button></div>`);
 }
