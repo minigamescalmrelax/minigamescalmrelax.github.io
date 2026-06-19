@@ -362,7 +362,7 @@ footer {
 }
 footer a { color: var(--primary); text-decoration: none; font-weight: 700; margin: 0 0.5rem; transition: color 0.2s; }
 footer a:hover { color: var(--text-main); }
-@media (max-width: 600px) { footer { flex-direction: column; gap: 0.5rem; padding: 0.5rem; } }
+@media (max-width: 600px) { footer { flex-direction: column; gap: 0.25rem; padding: 0.45rem; } }
 
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
@@ -519,6 +519,7 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const db = firebase.database();
 const ADMINS = ["dMbziKPNbmPMVKhxku0FlaKfZuH2"];
+const DEFAULT_AVATAR = "https://file.garden/ab3aurfNg352xuEX/profile.png";
 
 let me = null;
 let isLight = false;
@@ -647,7 +648,7 @@ function onLoggedIn() {
   document.getElementById('coinCount').textContent = me.coins || 0;
   
   const pav = document.getElementById('pav');
-  pav.innerHTML = me.avatar ? `<img src="${escapeHTML(me.avatar)}">` : `<span class="icon" style="color:var(--primary); margin: 3px;">${ICONS.user}</span>`;
+  pav.innerHTML = `<img src="${escapeHTML(me.avatar || DEFAULT_AVATAR)}">`;
   
   // Friend Request Badge Setup
   db.ref("friendRequests/"+me.uid).on("value", s => {
@@ -796,7 +797,7 @@ async function renderLeaderboard() {
     
     let h = '<div style="display:flex; flex-direction:column; gap:0.5rem">';
     users.forEach((u, i) => {
-      const av = u.avatar ? `<img src="${escapeHTML(u.avatar)}">` : `<span class="icon">${ICONS.user}</span>`;
+      const av = `<img src="${escapeHTML(u.avatar || DEFAULT_AVATAR)}">`;
       const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `<span style="font-size:0.9rem; color:var(--text-muted)">#${i+1}</span>`;
       h += `
         <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light); cursor:pointer; transition:all 0.2s" onclick="navigate('profile','${u.uid}')" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
@@ -1090,7 +1091,7 @@ async function doSearch() {
       let ph = "";
       if(results.length) {
         results.forEach(d => {
-          const av = d.avatar ? `<img src="${escapeHTML(d.avatar)}">` : `<span class="icon" style="margin:5px;">${ICONS.user}</span>`;
+          const av = `<img src="${escapeHTML(d.avatar || DEFAULT_AVATAR)}">`;
           const isFriend = me && me.friends && me.friends[d.uid];
           const isBlocked = me && me.blocked && me.blocked[d.uid];
           const isSent = me && me.sentRequests && me.sentRequests[d.uid];
@@ -1214,7 +1215,7 @@ async function unblockUser(id) {
 /* ── PROFILE DETAILS ── */
 async function renderProfile() {
   if(!me) return;
-  const av = me.avatar ? `<img src="${escapeHTML(me.avatar)}">` : `<span class="icon icon-xl" style="color:var(--primary); margin-top:20px">${ICONS.user}</span>`;
+  const av = `<img src="${escapeHTML(me.avatar || DEFAULT_AVATAR)}">`;
   const banner = me.banner ? `<img src="${escapeHTML(me.banner)}" style="width:100%;height:100%;object-fit:cover;">` : '';
   const isAdmin = ADMINS.includes(me.uid) ? `<span class="admin-badge">Admin</span>` : '';
   const fCount = me.friends ? Object.keys(me.friends).length : 0;
@@ -1227,7 +1228,7 @@ async function renderProfile() {
       reqHtml += `<div class="divider"></div><span class="lbl">Pending Requests</span><div style="display:flex; flex-direction:column; gap:0.5rem">`;
       rs.forEach(r => {
         const d = r.val();
-        const rAv = d.avatar ? `<img src="${escapeHTML(d.avatar)}">` : `<span class="icon">${ICONS.user}</span>`;
+        const rAv = `<img src="${escapeHTML(d.avatar || DEFAULT_AVATAR)}">`;
         reqHtml += `
           <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light)">
             <div class="chat-av" style="border-color:var(--accent)" onclick="navigate('profile','${r.key}')">${rAv}</div>
@@ -1267,7 +1268,7 @@ async function renderUserProfile(uid) {
     const snap = await db.ref("users/" + uid).get();
     if(!snap.exists()) return navigate('home');
     const u = snap.val();
-    const av = u.avatar ? `<img src="${escapeHTML(u.avatar)}">` : `<span class="icon icon-xl" style="color:var(--primary); margin-top:20px">${ICONS.user}</span>`;
+    const av = `<img src="${escapeHTML(u.avatar || DEFAULT_AVATAR)}">`;
     const banner = u.banner ? `<img src="${escapeHTML(u.banner)}" style="width:100%;height:100%;object-fit:cover;">` : '';
     const bioHtml = u.bio ? `<div class="profile-bio">"${escapeHTML(u.bio)}"</div>` : '';
     const isAdmin = ADMINS.includes(uid) ? `<span class="admin-badge">Admin</span>` : '';
@@ -1414,7 +1415,7 @@ async function renderChat() {
       const d = m.val(), k = m.key;
       if(me.blocked && me.blocked[d.uid]) return; // hide blocked users
       const isMine = d.uid === me.uid;
-      const av = d.avatar ? `<img src="${escapeHTML(d.avatar)}">` : `<div style="background:var(--primary);width:100%;height:100%; display:flex; align-items:center; justify-content:center; color:white;"><span class="icon">${ICONS.user}</span></div>`;
+      const av = `<img src="${escapeHTML(d.avatar || DEFAULT_AVATAR)}">`;
       const isAdmin = ADMINS.includes(d.uid) ? `<span style="color:var(--primary); font-size:0.6rem; vertical-align:top;">(Admin)</span>` : '';
       const iamAdmin = ADMINS.includes(me.uid);
       const delBtn = iamAdmin ? `<button class="del-msg-btn" onclick="deleteMsg('${path}','${k}')">Delete</button>` : '';
