@@ -473,6 +473,26 @@ function escapeHTML(str) {
   }[tag]));
 }
 
+/* ── COPY UID HELPER ── */
+function copyUID(uid) {
+  const el = document.createElement('textarea');
+  el.value = uid;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  toast("UID copied to clipboard!");
+}
+
+/* ── FORMAT UID / HANDLE LABEL TAG ── */
+// The label displays the actual friendly handle (e.g. @testaccount) while copying the actual raw UID on click!
+function formatHandleTag(handle, uid) {
+  if (!uid) return '';
+  let formattedHandle = handle || '@user';
+  if (!formattedHandle.startsWith('@')) formattedHandle = '@' + formattedHandle;
+  return `<span class="uid-tag" onclick="event.stopPropagation(); copyUID('${uid}')" title="Click to copy raw UID" style="cursor:pointer; font-family:monospace; background:rgba(255,255,255,0.06); border:1px solid var(--border-light); padding:0.15rem 0.5rem; border-radius:6px; font-size:0.75rem; color:var(--primary); transition:all 0.2s; display:inline-flex; align-items:center; gap:0.25rem;">${escapeHTML(formattedHandle)} 📋</span>`;
+}
+
 /* ── ICONS SVG ── */
 const ICONS = {
   search: `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
@@ -573,6 +593,10 @@ window.addEventListener('click', (e) => {
 document.addEventListener("keydown", e => { if(e.key === "Escape") { closeModal(); closeDropdown(); } });
 
 function navigate(path, arg) {
+  if (path === 'profile' && me && arg === me.uid) {
+    window.location.href = "https://minigamescalmrelax.github.io/#profile";
+    return;
+  }
   location.hash = arg ? `${path}/${arg}` : path;
 }
 
@@ -591,9 +615,15 @@ function handleRoute() {
 
   if(chatRef && chatCb) { chatRef.off("value", chatCb); chatRef = null; }
 
-  if (!me && (path === 'chat' || path === 'profile' || path === 'settings')) {
+  if (!me && (path === 'chat' || path === 'profile' || path === 'settings' || path === 'leaderboard')) {
     toast("Please log in to access this area.");
     navigate('home');
+    return;
+  }
+
+  // Redirect to correct hosted URL if referencing own profile
+  if (path === 'profile' && arg && me && arg === me.uid) {
+    window.location.href = "https://minigamescalmrelax.github.io/#profile";
     return;
   }
 
@@ -627,9 +657,10 @@ firebase.auth().onAuthStateChanged(async user => {
     const snap = await db.ref("users/" + user.uid).get();
     if (snap.exists()) {
       const d = snap.val();
-      me = { uid: user.uid, username: d.username||"User", coins: d.coins||0, avatar: d.avatar||"", banner: d.banner||"", bio: d.bio||"", friends: d.friends||{}, blocked: d.blocked||{}, sentRequests: d.sentRequests||{} };
+      me = { uid: user.uid, username: d.username||"@user", displayName: d.displayName||d.username||"User", coins: d.coins||0, avatar: d.avatar||"", banner: d.banner||"", bio: d.bio||"", friends: d.friends||{}, blocked: d.blocked||{}, sentRequests: d.sentRequests||{} };
     } else {
-      me = { uid: user.uid, username: user.email.split('@')[0], coins: 0, avatar: "", banner: "", bio: "", friends: {}, blocked: {}, sentRequests: {} };
+      const handle = "@" + user.email.split('@')[0];
+      me = { uid: user.uid, username: handle, displayName: user.email.split('@')[0], coins: 0, avatar: "", banner: "", bio: "", friends: {}, blocked: {}, sentRequests: {} };
       await db.ref("users/" + user.uid).set(me);
     }
     onLoggedIn();
@@ -650,18 +681,44 @@ function onLoggedIn() {
   const pav = document.getElementById('pav');
   pav.innerHTML = `<img src="${escapeHTML(me.avatar || DEFAULT_AVATAR)}">`;
   
-  // Friend Request Badge Setup
-  db.ref("friendRequests/"+me.uid).on("value", s => {
-    const c = s.exists() ? s.numChildren() : 0;
+  // Real-Time Handshake-driven Friend Request Inbox & Accept System Listener
+  db.ref("friendRequests/"+me.uid).on("value", async s => {
     const b = document.getElementById('profileBtn');
     const o = document.getElementById('reqBadge');
     if(o) o.remove();
-    if(c > 0) {
-      const d = document.createElement("span");
-      d.id = 'reqBadge'; d.textContent = c;
-      d.style.cssText = "background:var(--primary); color:#fff; font-size:0.6rem; font-weight:800; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border-radius:50%; position:absolute; top:-5px; right:-5px;";
-      b.style.position = 'relative';
-      b.appendChild(d);
+    
+    if(s.exists()) {
+      let pendingIncomingCount = 0;
+      s.forEach(child => {
+        const reqData = child.val();
+        const senderId = child.key;
+        
+        if(reqData.status === "accepted") {
+          // Handshake Step 3: We sent a request to senderId, and they accepted it!
+          // Add them to our database locally
+          db.ref("users/" + me.uid + "/friends/" + senderId).set(true);
+          db.ref("users/" + me.uid + "/sentRequests/" + senderId).remove();
+          // Remove the accepted notification so we only process it once
+          db.ref("friendRequests/" + me.uid + "/" + senderId).remove();
+          
+          if(!me.friends) me.friends = {};
+          me.friends[senderId] = true;
+          if(me.sentRequests) delete me.sentRequests[senderId];
+          
+          toast(`You and ${escapeHTML(reqData.username || 'User')} are now friends!`);
+          if(currentPath === 'profile' || currentPath === 'search') handleRoute();
+        } else {
+          pendingIncomingCount++;
+        }
+      });
+      
+      if(pendingIncomingCount > 0) {
+        const d = document.createElement("span");
+        d.id = 'reqBadge'; d.textContent = pendingIncomingCount;
+        d.style.cssText = "background:var(--primary); color:#fff; font-size:0.6rem; font-weight:800; width:16px; height:16px; display:flex; align-items:center; justify-content:center; border-radius:50%; position:absolute; top:-5px; right:-5px;";
+        b.style.position = 'relative';
+        b.appendChild(d);
+      }
     }
   });
 }
@@ -694,7 +751,8 @@ function openSignup() {
     <h2 style="margin-bottom:0.5rem"><span class="icon">${ICONS.userPlus}</span> Join the fun</h2>
     <p class="subtitle" style="font-size:0.85rem">Create your free account</p>
     <input class="input" id="suEmail" type="email" placeholder="Email">
-    <input class="input" id="suUsername" placeholder="Username">
+    <input class="input" id="suDisplayName" placeholder="Display Name (e.g. John Doe)">
+    <input class="input" id="suUsername" placeholder="Username Handle (e.g. testaccount)">
     <input class="input" id="suPass" type="password" placeholder="Password">
     <button class="btn-primary" style="width:100%; margin-top:0.5rem; padding:0.8rem;" onclick="doSignup()">Create Account</button>
   `);
@@ -702,14 +760,17 @@ function openSignup() {
 
 async function doSignup() {
   const e = document.getElementById('suEmail').value.trim();
-  const u = document.getElementById('suUsername').value.trim();
+  const dName = document.getElementById('suDisplayName').value.trim();
+  const uName = document.getElementById('suUsername').value.trim();
   const p = document.getElementById('suPass').value;
-  if(!e || !u || !p) return toast("Fill in all fields.");
+  if(!e || !dName || !uName || !p) return toast("Fill in all fields.");
   if(p.length < 6) return toast("Password must be 6+ characters");
+  
+  let handle = uName.startsWith('@') ? uName : '@' + uName;
   try {
     const c = await auth.createUserWithEmailAndPassword(e, p);
-    await db.ref("users/" + c.user.uid).set({ username: u, coins: 0, avatar: "", banner: "", bio: "", friends: {}, blocked: {} });
-    closeModal(); toast("Welcome, " + u + "!");
+    await db.ref("users/" + c.user.uid).set({ username: handle, displayName: dName, coins: 0, avatar: "", banner: "", bio: "", friends: {}, blocked: {} });
+    closeModal(); toast("Welcome, " + dName + "!");
   } catch(err) { toast(err.message); }
 }
 
@@ -759,6 +820,10 @@ function openSettings() {
   if(!me) return;
   openModal(`
     <h2 style="margin-bottom:1rem">⚙️ Settings</h2>
+    <span class="lbl">Display Name</span>
+    <input class="input" id="setDisplayName" value="${escapeHTML(me.displayName || '')}">
+    <span class="lbl">Username Handle</span>
+    <input class="input" id="setHandle" value="${escapeHTML(me.username || '')}">
     <span class="lbl">Bio / Status</span>
     <input class="input" id="setBio" placeholder="What's on your mind?" value="${escapeHTML(me.bio || '')}" maxlength="80">
     <span class="lbl">Theme</span>
@@ -769,9 +834,15 @@ function openSettings() {
 
 async function saveSettings() {
   const bio = document.getElementById('setBio').value.trim();
+  const dName = document.getElementById('setDisplayName').value.trim();
+  let handle = document.getElementById('setHandle').value.trim();
+  
+  if(!dName || !handle) return toast("Display Name and Handle are required.");
+  if(!handle.startsWith('@')) handle = '@' + handle;
+  
   try {
-    await db.ref("users/" + me.uid + "/bio").set(bio);
-    me.bio = bio;
+    await db.ref("users/" + me.uid).update({ bio: bio, displayName: dName, username: handle });
+    me.bio = bio; me.displayName = dName; me.username = handle;
     toast("Settings saved!");
     closeModal();
     if(currentPath === 'profile') renderProfile();
@@ -799,11 +870,16 @@ async function renderLeaderboard() {
     users.forEach((u, i) => {
       const av = `<img src="${escapeHTML(u.avatar || DEFAULT_AVATAR)}">`;
       const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `<span style="font-size:0.9rem; color:var(--text-muted)">#${i+1}</span>`;
+      const uDisplayName = u.displayName || u.username || "User";
+      const uHandle = u.username ? (u.username.startsWith('@') ? u.username : '@' + u.username) : '@user';
       h += `
         <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light); cursor:pointer; transition:all 0.2s" onclick="navigate('profile','${u.uid}')" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
           <div style="font-size:1.5rem; font-weight:900; width:40px; text-align:center;">${medal}</div>
           <div class="chat-av">${av}</div>
-          <div style="flex:1; font-weight:700;">${escapeHTML(u.username)}</div>
+          <div style="flex:1; font-weight:700; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+            <span>${escapeHTML(uDisplayName)}</span>
+            ${formatHandleTag(uHandle, u.uid)}
+          </div>
           <div class="chip coins" style="font-size:0.85rem">🪙 ${u.coins||0}</div>
         </div>`;
     });
@@ -814,6 +890,46 @@ async function renderLeaderboard() {
   }
 }
 
+/* ── PROFILE FRIENDS LIST RENDERER ── */
+async function fetchAndRenderFriends(friendsObj, targetElId) {
+  const el = document.getElementById(targetElId);
+  if(!el) return;
+  if(!friendsObj || Object.keys(friendsObj).length === 0) {
+    el.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">No friends yet.</p>`;
+    return;
+  }
+  const fids = Object.keys(friendsObj).filter(k => friendsObj[k]);
+  if(fids.length === 0) {
+    el.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">No friends yet.</p>`;
+    return;
+  }
+  
+  el.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">Loading friends list...</p>`;
+  let html = `<div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.8rem; margin-top: 0.5rem;">`;
+  
+  try {
+    for(const fid of fids) {
+      const snap = await db.ref("users/" + fid).get();
+      if(snap.exists()) {
+        const u = snap.val();
+        const uDisplayName = u.displayName || u.username || "User";
+        const uHandle = u.username ? (u.username.startsWith('@') ? u.username : '@' + u.username) : '@user';
+        const uAv = u.avatar || DEFAULT_AVATAR;
+        html += `
+          <div style="display:flex; flex-direction:column; align-items:center; background:rgba(255,255,255,0.03); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:0.8rem; text-align:center; cursor:pointer; transition:all 0.2s;" onclick="navigate('profile','${fid}')" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border-light)'">
+            <img src="${escapeHTML(uAv)}" style="width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--primary); margin-bottom:0.4rem;">
+            <div style="font-size:0.8rem; font-weight:700; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHTML(uDisplayName)}</div>
+            <div style="font-size:0.7rem; color:var(--text-muted); width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHTML(uHandle)}</div>
+          </div>
+        `;
+      }
+    }
+    html += `</div>`;
+    el.innerHTML = html;
+  } catch(e) {
+    el.innerHTML = `<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">Error loading friends.</p>`;
+  }
+}
 
 /* ── STATIC INFO PAGES ── */
 function renderHome() {
@@ -1034,7 +1150,7 @@ function renderSearch() {
       <button class="stab" id="tab-games" onclick="setSearchTab('games')">Games</button>
       <button class="stab" id="tab-people" onclick="setSearchTab('people')">People</button>
     </div>
-    <input class="input" id="searchInput" placeholder="Search games or exact usernames..." oninput="doSearch()" autocomplete="off">
+    <input class="input" id="searchInput" placeholder="Search games or exact handles..." oninput="doSearch()" autocomplete="off">
     <div id="searchResults"></div>
   `);
   renderSearchDefault();
@@ -1095,6 +1211,10 @@ async function doSearch() {
           const isFriend = me && me.friends && me.friends[d.uid];
           const isBlocked = me && me.blocked && me.blocked[d.uid];
           const isSent = me && me.sentRequests && me.sentRequests[d.uid];
+          
+          const uDisplayName = d.displayName || d.username || "User";
+          const uHandle = d.username ? (d.username.startsWith('@') ? d.username : '@' + d.username) : '@user';
+          
           let actHtml = "";
           if(me && d.uid !== me.uid) {
             if(isBlocked) actHtml = `<button class="btn-danger btn-sm" onclick="event.stopPropagation(); unblockUser('${d.uid}')">Unblock</button>`;
@@ -1105,21 +1225,24 @@ async function doSearch() {
           ph += `
             <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light); margin-bottom:0.5rem; cursor:pointer;" onclick="navigate('profile', '${d.uid}')">
               <div class="chat-av" style="border-color:var(--primary)">${av}</div>
-              <div style="flex:1; font-weight:700;">${escapeHTML(d.username||'?')} ${isFriend ? '<span class="chip online" style="display:inline-flex; font-size:0.55rem; padding:0.1rem 0.4rem;">Friend</span>' : ''}</div>
+              <div style="flex:1; font-weight:700; display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+                <span>${escapeHTML(uDisplayName)}</span> 
+                ${formatHandleTag(uHandle, d.uid)}
+                ${isFriend ? '<span class="chip online" style="display:inline-flex; font-size:0.55rem; padding:0.1rem 0.4rem;">Friend</span>' : ''}
+              </div>
               ${actHtml}
             </div>
           `;
         });
       } else {
-        ph = `<p style="color:var(--text-muted)">No users found. Try searching exact username or UID.</p>`;
+        ph = `<p style="color:var(--text-muted)">No users found. Try searching exact handle or UID.</p>`;
       }
       document.getElementById('peopleSlot').innerHTML = ph;
     } catch(e) { console.error(e); }
   } else r.innerHTML = h;
 }
 
-/* ── ROBUST FRIEND REQUEST FIX ── */
-// This logic bypasses Firebase Security permission limits on editing someone else's list.
+/* ── ROBUST FRIEND REQUEST HANDSHAKE FIX ── */
 async function addFriendFromInput() {
   const id = document.getElementById('fuid')?.value.trim();
   if(!id) return toast("Paste UID");
@@ -1127,6 +1250,7 @@ async function addFriendFromInput() {
   if(id === me.uid) return toast("That's you");
   await sendFriendRequest(id);
 }
+
 async function sendFriendRequest(fid) {
   if(!me) return;
   if(me.friends && me.friends[fid]) return toast("Already friends");
@@ -1137,7 +1261,7 @@ async function sendFriendRequest(fid) {
     const s = await db.ref("users/"+fid).get();
     if(!s.exists()) return toast("User not found");
     
-    await db.ref("friendRequests/"+fid+"/"+me.uid).set({ from: me.uid, username: me.username, avatar: me.avatar||"", ts: Date.now() });
+    await db.ref("friendRequests/"+fid+"/"+me.uid).set({ from: me.uid, username: me.displayName || me.username || "User", avatar: me.avatar||"", ts: Date.now() });
     await db.ref("users/"+me.uid+"/sentRequests/"+fid).set(true);
     if(!me.sentRequests) me.sentRequests = {}; me.sentRequests[fid] = true;
     toast("Request sent!");
@@ -1148,22 +1272,21 @@ async function sendFriendRequest(fid) {
 async function acceptFriendRequest(id, isMutual) {
   if(!me) return;
   try {
-    // 1. We write to OUR OWN friends list (Guaranteed to work based on permissions)
+    // Handshake Step 1: Write to our own list
     await db.ref("users/"+me.uid+"/friends/"+id).set(true);
-    // 2. We remove the incoming request from OUR OWN queue
+    // Handshake Step 2: Remove incoming request from our box
     await db.ref("friendRequests/"+me.uid+"/"+id).remove();
     
-    // 3. We attempt to update THEIR list. If their Firebase rules are strict, this fails. 
-    // We wrap it in a try-catch so it doesn't break the entire function!
-    try {
-      await db.ref("users/"+id+"/friends/"+me.uid).set(true);
-      await db.ref("users/"+id+"/sentRequests/"+me.uid).remove();
-    } catch(permErr) {
-      console.warn("Could not write to the other user's node directly due to security rules. But friend request was cleared locally.");
-    }
+    // Handshake Step 3: Write an "accepted" status to their requests queue (Bypasses private user write limits!)
+    await db.ref("friendRequests/"+id+"/"+me.uid).set({
+      status: "accepted",
+      username: me.displayName || me.username || "User",
+      avatar: me.avatar||"",
+      ts: Date.now()
+    });
 
     if(!me.friends) me.friends={}; me.friends[id]=true;
-    toast(isMutual ? "Mutual Request!" : "Friend added!");
+    toast("Friend request accepted!");
     renderProfile();
   } catch(e) { toast("Error: " + e.message); }
 }
@@ -1225,19 +1348,24 @@ async function renderProfile() {
   try {
     const rs = await db.ref("friendRequests/"+me.uid).once("value");
     if(rs.exists()) {
-      reqHtml += `<div class="divider"></div><span class="lbl">Pending Requests</span><div style="display:flex; flex-direction:column; gap:0.5rem">`;
-      rs.forEach(r => {
-        const d = r.val();
-        const rAv = `<img src="${escapeHTML(d.avatar || DEFAULT_AVATAR)}">`;
-        reqHtml += `
-          <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light)">
-            <div class="chat-av" style="border-color:var(--accent)" onclick="navigate('profile','${r.key}')">${rAv}</div>
-            <div style="flex:1; font-weight:700;">${escapeHTML(d.username||'?')}</div>
-            <button class="btn-primary btn-sm" onclick="acceptFriendRequest('${r.key}',false)">Accept</button>
-            <button class="btn-outline btn-sm" onclick="declineFriendRequest('${r.key}')">Decline</button>
-          </div>`;
+      let rq = [];
+      rs.forEach(child => {
+        if(child.val().status !== "accepted") rq.push({ key: child.key, ...child.val() });
       });
-      reqHtml += `</div>`;
+      if(rq.length > 0) {
+        reqHtml += `<div class="divider"></div><span class="lbl">Pending Requests</span><div style="display:flex; flex-direction:column; gap:0.5rem">`;
+        rq.forEach(r => {
+          const rAv = `<img src="${escapeHTML(r.avatar || DEFAULT_AVATAR)}">`;
+          reqHtml += `
+            <div style="display:flex; align-items:center; gap:1rem; background:rgba(0,0,0,0.2); padding:0.75rem 1rem; border-radius:var(--radius-md); border:1px solid var(--border-light)">
+              <div class="chat-av" style="border-color:var(--accent)" onclick="navigate('profile','${r.key}')">${rAv}</div>
+              <div style="flex:1; font-weight:700;">${escapeHTML(r.username||'?')}</div>
+              <button class="btn-primary btn-sm" onclick="acceptFriendRequest('${r.key}',false)">Accept</button>
+              <button class="btn-outline btn-sm" onclick="declineFriendRequest('${r.key}')">Decline</button>
+            </div>`;
+        });
+        reqHtml += `</div>`;
+      }
     }
   } catch(_) {}
   
@@ -1245,22 +1373,33 @@ async function renderProfile() {
     <div class="profile-header">
       <div class="profile-banner">${banner}</div>
       <div class="profile-av">${av}</div>
-      <h2 style="display:flex; align-items:center; gap:0.5rem">${escapeHTML(me.username)} ${isAdmin}</h2>
+      <h2 style="display:flex; align-items:center; gap:0.5rem">${escapeHTML(me.displayName)} ${isAdmin}</h2>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 0.5rem;">${escapeHTML(me.username)}</p>
       ${bioHtml}
       <p class="subtitle" style="margin-bottom:0.5rem">${me.coins||0} Coins &middot; ${fCount} Friends</p>
       <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
         <label class="upload-lbl"><span class="icon">${ICONS.user}</span> Avatar<input type="file" accept="image/*" onchange="uploadAvatar(event)"></label>
         <label class="upload-lbl"><span class="icon">${ICONS.banner}</span> Banner<input type="file" accept="image/*" onchange="uploadBanner(event)"></label>
       </div>
-      <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1rem;">UID: <strong style="color:var(--primary); user-select:all">${me.uid}</strong></p>
+      <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1.2rem; display:flex; align-items:center; gap:0.4rem; justify-content:center;">
+        Copy UID: ${formatHandleTag(me.username, me.uid)}
+      </p>
     </div>
     ${reqHtml}
+    
+    <div class="divider"></div>
+    <span class="lbl">Friends List</span>
+    <div id="profile-friends-container"></div>
+    
     <div class="divider"></div>
     <div style="display:flex; gap:1rem; justify-content:center;">
       <button class="btn-outline" onclick="openSettings()">Edit Profile</button>
       <button class="btn-danger" onclick="deleteAccount()">Delete Account</button>
     </div>
   `);
+  
+  // Render friends
+  fetchAndRenderFriends(me.friends, "profile-friends-container");
 }
 
 async function renderUserProfile(uid) {
@@ -1272,6 +1411,9 @@ async function renderUserProfile(uid) {
     const banner = u.banner ? `<img src="${escapeHTML(u.banner)}" style="width:100%;height:100%;object-fit:cover;">` : '';
     const bioHtml = u.bio ? `<div class="profile-bio">"${escapeHTML(u.bio)}"</div>` : '';
     const isAdmin = ADMINS.includes(uid) ? `<span class="admin-badge">Admin</span>` : '';
+    
+    const uDisplayName = u.displayName || u.username || "User";
+    const uHandle = u.username ? (u.username.startsWith('@') ? u.username : '@' + u.username) : '@user';
     
     let actions = ""; let adminActions = "";
     if(me) {
@@ -1300,13 +1442,25 @@ async function renderUserProfile(uid) {
       <div class="profile-header">
         <div class="profile-banner">${banner}</div>
         <div class="profile-av">${av}</div>
-        <h2 style="display:flex; align-items:center; gap:0.5rem">${escapeHTML(u.username)} ${isAdmin}</h2>
+        <h2 style="display:flex; align-items:center; gap:0.5rem">${escapeHTML(uDisplayName)} ${isAdmin}</h2>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">${escapeHTML(uHandle)}</p>
         ${bioHtml}
         <p class="subtitle" style="margin-bottom:0.5rem">${u.coins||0} Coins</p>
         <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">${actions}</div>
         ${adminActions}
+        <p style="font-size:0.7rem; color:var(--text-muted); margin-top:1.5rem; display:flex; align-items:center; gap:0.4rem; justify-content:center;">
+          Copy UID: ${formatHandleTag(uHandle, uid)}
+        </p>
       </div>
+      
+      <div class="divider"></div>
+      <span class="lbl">Friends List</span>
+      <div id="profile-friends-container"></div>
     `);
+    
+    // Render friends
+    fetchAndRenderFriends(u.friends, "profile-friends-container");
+    
   } catch(e) { toast('Error loading profile'); }
 }
 
@@ -1379,7 +1533,7 @@ async function renderChat() {
   for(const id of fids) {
     const act = activeDM === id ? "active" : "";
     let name = id.slice(0,8)+"...";
-    try { const s = await db.ref("users/"+id+"/username").once("value"); if(s.exists()) name = s.val(); } catch(_) {}
+    try { const s = await db.ref("users/"+id).once("value"); if(s.exists()) name = s.val().displayName || s.val().username || name; } catch(_) {}
     fBtns += `<button class="btn-nav ${act}" style="width:100%; justify-content:flex-start; margin-bottom:0.25rem; font-size:0.8rem;" onclick="navigate('chat','${id}')">@ ${escapeHTML(name)}</button>`;
   }
   
@@ -1420,11 +1574,19 @@ async function renderChat() {
       const iamAdmin = ADMINS.includes(me.uid);
       const delBtn = iamAdmin ? `<button class="del-msg-btn" onclick="deleteMsg('${path}','${k}')">Delete</button>` : '';
       
+      const uDisplayName = d.user || "User";
+      const uHandle = d.handle ? (d.handle.startsWith('@') ? d.handle : '@' + d.handle) : '';
+      const handleDisplay = uHandle ? formatHandleTag(uHandle, d.uid) : '';
+      
       h += `
         <div class="chat-msg ${isMine ? 'mine' : ''}">
           <div class="chat-av" onclick="navigate('profile','${escapeHTML(d.uid)}')">${av}</div>
           <div class="chat-content">
-            <div class="chat-header" onclick="navigate('profile','${escapeHTML(d.uid)}')">${escapeHTML(d.user||"?")} ${isAdmin}</div>
+            <div class="chat-header" onclick="navigate('profile','${escapeHTML(d.uid)}')" style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+              <span>${escapeHTML(uDisplayName)}</span>
+              ${handleDisplay}
+              ${isAdmin}
+            </div>
             <div class="chat-bubble">${escapeHTML(d.text)}</div>
           </div>
           ${delBtn}
@@ -1443,7 +1605,7 @@ async function sendMsg() {
   inp.value = "";
   const path = activeDM ? "dm/" + [me.uid, activeDM].sort().join("_") : "chat/global";
   try {
-    await db.ref(path).push({ uid: me.uid, user: me.username, avatar: me.avatar || "", text: text, ts: Date.now() });
+    await db.ref(path).push({ uid: me.uid, user: me.displayName || me.username, handle: me.username || "@user", avatar: me.avatar || "", text: text, ts: Date.now() });
   } catch(e) { toast("Failed to send"); }
 }
 
